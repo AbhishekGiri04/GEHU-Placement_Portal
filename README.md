@@ -194,8 +194,7 @@ GEHU-Smart_Placement_Portal/
    - Drag & drop to Netlify dashboard
    - Instant deployment
 
-3. **One-Click Deploy:**
-   [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/abhishekgiri04/GEHU-Smart_Placement_Portal)
+3. **One-Click Deploy:** [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/abhishekgiri04/GEHU-Smart_Placement_Portal)
 
 <br>
 
