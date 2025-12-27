@@ -150,7 +150,7 @@ GEHU-Smart_Placement_Portal/
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/AbhishekGiri04/GEHU-Placement_Portal.git
-   cd GEHU-Placement_Portal
+   cd GEHU-Placement Portal
    ```
 
 2. **Open the application:**
