@@ -95,10 +95,38 @@
     startAutoSlide();
 
     // Form submission
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      alert('Thank you for your message! We will get back to you soon.');
-      this.reset();
+      
+      const formData = new FormData(this);
+      const messageData = {
+        sender_name: formData.get('name'),
+        sender_email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message')
+      };
+      
+      try {
+        const response = await fetch('/api/messages/send', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(messageData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('Thank you for your message! We will get back to you soon.');
+          this.reset();
+        } else {
+          alert('Failed to send message. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+        alert('Failed to send message. Please try again.');
+      }
     });
 
     // Scroll animations and active navigation

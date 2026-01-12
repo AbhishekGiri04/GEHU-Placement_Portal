@@ -1,0 +1,12 @@
+node_modules
+.env
+.env.local
+.env.production.local
+.env.development.local
+backend/node_modules
+backend/.env
+*.log
+.DS_Store
+.git
+README.md
+docs/

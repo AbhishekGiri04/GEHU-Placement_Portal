@@ -248,7 +248,7 @@ font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', s
 width:100%;
 height:100vh;
 font-size:0.88rem;
-user-select:none;
+user-select:text;
 overflow-x:hidden;
 background-color:var(--clr-color-background);
 margin:0;
@@ -2858,14 +2858,367 @@ Help
 </nav>
 
 <script>
-function showDashboard() {
-    // Hide all main sections
-    document.querySelectorAll('main').forEach(p => p.style.display = 'none');
-    // Show dashboard
-    document.getElementById('dashboard').style.display = 'block';
-    // Update sidebar active state
-    document.querySelectorAll('aside .sidebar a').forEach(l => l.classList.remove('active'));
-    document.querySelector('aside .sidebar a[onclick*="dashboard"]').classList.add('active');
+<script>
+// Student Registration Functions
+function showTab(tabName, button) {
+    document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.style.display = 'none';
+        tab.style.opacity = '0';
+    });
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = 'white';
+        btn.style.color = '#6b7280';
+        btn.style.border = '1px solid #e5e7eb';
+    });
+    
+    const selectedTab = document.getElementById(tabName);
+    selectedTab.style.display = 'block';
+    setTimeout(() => selectedTab.style.opacity = '1', 50);
+    
+    button.classList.add('active');
+    button.style.background = 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)';
+    button.style.color = 'white';
+    button.style.border = 'none';
+    button.style.boxShadow = '0 2px 8px rgba(59,130,246,0.3)';
+}
+
+function registerStudent() {
+    // Get form inputs directly by their attributes
+    const fullName = document.querySelector('input[placeholder="Enter full name"]').value.trim();
+    const rollNumber = document.querySelector('input[placeholder="Auto-generated or manual"]').value.trim();
+    const email = document.querySelector('input[placeholder="student@college.edu"]').value.trim();
+    const phone = document.querySelector('input[placeholder="10-digit number"]').value.trim();
+    const dob = document.querySelector('input[type="date"]').value;
+    const gender = document.querySelector('select').value;
+    const department = document.querySelectorAll('select')[1].value;
+    const year = document.querySelectorAll('select')[2].value;
+    const cgpa = document.querySelector('input[placeholder="0.0 - 10.0"]').value;
+    
+    // Basic validation
+    if (!fullName) {
+        alert('Please enter full name');
+        return;
+    }
+    
+    if (!rollNumber) {
+        alert('Please enter roll number');
+        return;
+    }
+    
+    if (!email) {
+        alert('Please enter email');
+        return;
+    }
+    
+    if (!phone || !/^\d{10}$/.test(phone)) {
+        alert('Please enter valid 10-digit phone number');
+        return;
+    }
+    
+    const studentData = {
+        fullName, rollNumber, email, phone, dob, gender, department, year, cgpa
+    };
+    
+    const submitBtn = document.querySelector('.btn-primary');
+    submitBtn.textContent = 'Registering...';
+    submitBtn.disabled = true;
+    
+    setTimeout(() => {
+        addToPendingList(studentData);
+        updateRegistrationStats();
+        
+        submitBtn.textContent = 'Register Student';
+        submitBtn.disabled = false;
+        
+        alert(`✅ Student ${fullName} registered successfully!\nRoll: ${rollNumber}`);
+    }, 1000);
+}
+
+function clearForm() {
+    document.querySelector('input[placeholder="Enter full name"]').value = '';
+    document.querySelector('input[placeholder="Auto-generated or manual"]').value = '';
+    document.querySelector('input[placeholder="student@college.edu"]').value = '';
+    document.querySelector('input[placeholder="10-digit number"]').value = '';
+    document.querySelector('input[type="date"]').value = '';
+    document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+    document.querySelectorAll('input[type="number"], input[type="text"]').forEach(input => {
+        if (input.placeholder.includes('CGPA') || input.placeholder.includes('%') || input.placeholder.includes('SDE') || input.placeholder.includes('Full Stack')) {
+            input.value = '';
+        }
+    });
+    document.querySelectorAll('input[type="file"]').forEach(file => file.value = '');
+}
+
+function dropHandler(event) {
+    event.preventDefault();
+    const uploadArea = event.currentTarget;
+    uploadArea.style.borderColor = '#cbd5e1';
+    uploadArea.style.background = '#f0f9ff';
+    
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+        const file = files[0];
+        const fileName = file.name.toLowerCase();
+        
+        if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls') || fileName.endsWith('.csv')) {
+            document.querySelector('.bulk-file-input').files = files;
+            uploadArea.querySelector('p').textContent = `File selected: ${file.name}`;
+            uploadArea.style.background = '#dcfce7';
+            uploadArea.style.borderColor = '#10b981';
+        } else {
+            alert('Please drop a valid Excel (.xlsx, .xls) or CSV (.csv) file');
+        }
+    }
+}
+
+function dragOverHandler(event) {
+    event.preventDefault();
+    const uploadArea = event.currentTarget;
+    uploadArea.style.borderColor = '#3b82f6';
+    uploadArea.style.background = '#dbeafe';
+}
+
+function dragLeaveHandler(event) {
+    event.preventDefault();
+    const uploadArea = event.currentTarget;
+    uploadArea.style.borderColor = '#cbd5e1';
+    uploadArea.style.background = '#f0f9ff';
+}
+
+function handleFileSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const uploadText = document.getElementById('uploadText');
+        uploadText.textContent = `Selected: ${file.name}`;
+        const uploadArea = document.querySelector('.upload-area');
+        uploadArea.style.background = '#dcfce7';
+        uploadArea.style.borderColor = '#10b981';
+    }
+}
+
+function generateRollNumber() {
+    const year = new Date().getFullYear();
+    const random = Math.floor(Math.random() * 999) + 1;
+    return `${year}CSE${random.toString().padStart(3, '0')}`;
+}
+
+function addToPendingList(studentData) {
+    const manageTable = document.querySelector('#manage tbody');
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td style="padding:1rem; border-bottom:1px solid #f1f5f9;"><img src="https://4.bp.blogspot.com/-zsbDeAUd8aY/US7F0ta5d9I/AAAAAAAAEKY/UL2AAhHj6J8/s1600/facebook-default-no-profile-pic.jpg" style="width:40px; height:40px; border-radius:50%; object-fit:cover; border:2px solid #e5e7eb;" alt="Profile"></td>
+        <td style="padding:1rem; border-bottom:1px solid #f1f5f9; font-weight:500; color:#1a1a1a;">${studentData.fullName}</td>
+        <td style="padding:1rem; border-bottom:1px solid #f1f5f9; color:#64748b;">${studentData.rollNumber}</td>
+        <td style="padding:1rem; border-bottom:1px solid #f1f5f9; color:#64748b;">${studentData.department}</td>
+        <td style="padding:1rem; border-bottom:1px solid #f1f5f9; color:#64748b;">${studentData.cgpa}</td>
+        <td style="padding:1rem; border-bottom:1px solid #f1f5f9;"><span style="background:#fef3c7; color:#d97706; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.75rem; font-weight:500;">Pending</span></td>
+        <td style="padding:1rem; border-bottom:1px solid #f1f5f9;">
+            <button onclick="approveStudent(this)" style="background:#e8f5e8; color:#16a34a; padding:0.5rem 1rem; border:1px solid #bbf7d0; border-radius:8px; margin:0 0.25rem; font-size:0.75rem; font-weight:500; cursor:pointer;">Approve</button>
+            <button onclick="rejectStudent(this)" style="background:#fee8e8; color:#dc2626; padding:0.5rem 1rem; border:1px solid #fca5a5; border-radius:8px; margin:0 0.25rem; font-size:0.75rem; font-weight:500; cursor:pointer;">Reject</button>
+        </td>
+    `;
+    manageTable.appendChild(newRow);
+}
+
+function updateRegistrationStats() {
+    const totalEl = document.querySelector('.stat-item:nth-child(1) .stat-number');
+    const pendingEl = document.querySelector('.stat-item:nth-child(3) .stat-number');
+    
+    totalEl.textContent = parseInt(totalEl.textContent) + 1;
+    pendingEl.textContent = parseInt(pendingEl.textContent) + 1;
+}
+
+function approveStudent(button) {
+    const row = button.closest('tr');
+    const statusCell = row.cells[5];
+    const actionsCell = row.cells[6];
+    
+    statusCell.innerHTML = '<span style="background:#dcfce7; color:#16a34a; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.75rem; font-weight:500;">Approved</span>';
+    actionsCell.innerHTML = '<button style="background:#e8f2ff; color:#2563eb; padding:0.5rem 1rem; border:1px solid #93c5fd; border-radius:8px; font-size:0.75rem; cursor:pointer;">View</button>';
+    
+    const approvedEl = document.querySelector('.stat-item:nth-child(2) .stat-number');
+    const pendingEl = document.querySelector('.stat-item:nth-child(3) .stat-number');
+    
+    approvedEl.textContent = parseInt(approvedEl.textContent) + 1;
+    pendingEl.textContent = parseInt(pendingEl.textContent) - 1;
+    
+    alert('Student approved successfully!');
+}
+
+function rejectStudent(button) {
+    if (confirm('Are you sure you want to reject this student?')) {
+        const row = button.closest('tr');
+        const statusCell = row.cells[5];
+        
+        statusCell.innerHTML = '<span style="background:#fee2e2; color:#dc2626; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.75rem; font-weight:500;">Rejected</span>';
+        row.cells[6].innerHTML = '<span style="color:#9ca3af; font-size:0.75rem;">No actions</span>';
+        
+        const rejectedEl = document.querySelector('.stat-item:nth-child(4) .stat-number');
+        const pendingEl = document.querySelector('.stat-item:nth-child(3) .stat-number');
+        
+        rejectedEl.textContent = parseInt(rejectedEl.textContent) + 1;
+        pendingEl.textContent = parseInt(pendingEl.textContent) - 1;
+        
+        alert('Student rejected.');
+    }
+}
+
+function processBulkUpload() {
+    const fileInput = document.querySelector('.bulk-file-input');
+    if (!fileInput.files[0]) {
+        alert('Please select a file first');
+        return;
+    }
+    
+    const file = fileInput.files[0];
+    const fileName = file.name.toLowerCase();
+    
+    if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls') && !fileName.endsWith('.csv')) {
+        alert('Please upload a valid Excel (.xlsx, .xls) or CSV (.csv) file');
+        return;
+    }
+    
+    const uploadBtn = document.querySelector('#bulk .upload-btn:last-child');
+    uploadBtn.textContent = 'Processing...';
+    uploadBtn.disabled = true;
+    
+    setTimeout(() => {
+        const randomCount = Math.floor(Math.random() * 20) + 5;
+        
+        // Add sample students to manage table
+        const sampleStudents = [
+            {name: 'Rahul Kumar', roll: '2024CSE101', dept: 'CSE', cgpa: '8.5'},
+            {name: 'Anita Singh', roll: '2024ECE102', dept: 'ECE', cgpa: '9.2'},
+            {name: 'Vikash Patel', roll: '2024ME103', dept: 'ME', cgpa: '7.8'},
+            {name: 'Sneha Gupta', roll: '2024CE104', dept: 'CE', cgpa: '8.9'}
+        ];
+        
+        const manageTable = document.querySelector('#manage tbody');
+        sampleStudents.forEach(student => {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td style="padding:1rem; border-bottom:1px solid #f1f5f9;"><img src="https://4.bp.blogspot.com/-zsbDeAUd8aY/US7F0ta5d9I/AAAAAAAAEKY/UL2AAhHj6J8/s1600/facebook-default-no-profile-pic.jpg" style="width:40px; height:40px; border-radius:50%; object-fit:cover; border:2px solid #e5e7eb;" alt="Profile"></td>
+                <td style="padding:1rem; border-bottom:1px solid #f1f5f9; font-weight:500; color:#1a1a1a;">${student.name}</td>
+                <td style="padding:1rem; border-bottom:1px solid #f1f5f9; color:#64748b;">${student.roll}</td>
+                <td style="padding:1rem; border-bottom:1px solid #f1f5f9; color:#64748b;">${student.dept}</td>
+                <td style="padding:1rem; border-bottom:1px solid #f1f5f9; color:#64748b;">${student.cgpa}</td>
+                <td style="padding:1rem; border-bottom:1px solid #f1f5f9;"><span style="background:#fef3c7; color:#d97706; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.75rem; font-weight:500;">Pending</span></td>
+                <td style="padding:1rem; border-bottom:1px solid #f1f5f9;">
+                    <button onclick="approveStudent(this)" style="background:#e8f5e8; color:#16a34a; padding:0.5rem 1rem; border:1px solid #bbf7d0; border-radius:8px; margin:0 0.25rem; font-size:0.75rem; font-weight:500; cursor:pointer;">Approve</button>
+                    <button onclick="rejectStudent(this)" style="background:#fee8e8; color:#dc2626; padding:0.5rem 1rem; border:1px solid #fca5a5; border-radius:8px; margin:0 0.25rem; font-size:0.75rem; font-weight:500; cursor:pointer;">Reject</button>
+                </td>
+            `;
+            manageTable.appendChild(newRow);
+        });
+        
+        const totalEl = document.querySelector('.stat-item:nth-child(1) .stat-number');
+        const pendingEl = document.querySelector('.stat-item:nth-child(3) .stat-number');
+        
+        totalEl.textContent = parseInt(totalEl.textContent) + randomCount;
+        pendingEl.textContent = parseInt(pendingEl.textContent) + randomCount;
+        
+        uploadBtn.textContent = 'Upload & Process';
+        uploadBtn.disabled = false;
+        fileInput.value = '';
+        
+        alert(`Successfully uploaded ${randomCount} students from ${file.name}!`);
+    }, 2000);
+}
+
+function downloadTemplate() {
+    const csvContent = `Full Name,Roll Number,Email,Phone,Date of Birth,Gender,Department,Year,CGPA,10th Percentage,12th Percentage,Backlogs,Skills\nRahul Sharma,2024CSE001,rahul@college.edu,9876543210,2003-05-15,Male,CSE,2024,8.5,85,87,None,Python Java SQL\nPriya Patel,2024ECE002,priya@college.edu,9876543211,2003-08-20,Female,ECE,2024,9.1,92,89,None,C++ MATLAB Embedded`;
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'student_registration_template.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+}
+
+function searchStudents() {
+    const searchInput = document.querySelector('#manage input[placeholder*="Search"]');
+    const searchTerm = searchInput.value.toLowerCase();
+    const rows = document.querySelectorAll('#manage tbody tr');
+    
+    rows.forEach(row => {
+        const name = row.cells[1].textContent.toLowerCase();
+        const rollNo = row.cells[2].textContent.toLowerCase();
+        
+        if (name.includes(searchTerm) || rollNo.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function viewStudent(button) {
+    const row = button.closest('tr');
+    const name = row.cells[1].textContent;
+    const rollNo = row.cells[2].textContent;
+    const dept = row.cells[3].textContent;
+    const cgpa = row.cells[4].textContent;
+    const status = row.cells[5].textContent.trim();
+    
+    showStudentProfile(name, rollNo, dept, cgpa, status);
+}
+
+function editStudent(button) {
+    const row = button.closest('tr');
+    const name = row.cells[1].textContent;
+    const rollNo = row.cells[2].textContent;
+    const dept = row.cells[3].textContent;
+    const cgpa = row.cells[4].textContent;
+    
+    showEditProfile(name, rollNo, dept, cgpa, row);
+}
+
+function showStudentProfile(name, rollNo, dept, cgpa, status) {
+    const modal = document.createElement('div');
+    modal.id = 'studentProfileModal';
+    modal.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; display:flex; align-items:center; justify-content:center;';
+    
+    modal.innerHTML = `
+        <div style="background:white; border-radius:16px; padding:2rem; max-width:400px; width:90%; box-shadow:0 20px 40px rgba(0,0,0,0.15);">
+            <div style="text-align:center; margin-bottom:1.5rem;">
+                <h3 style="margin:0; color:#1e293b; font-size:1.25rem; font-weight:700;">Student Details</h3>
+            </div>
+            <div style="text-align:left; line-height:1.8; color:#374151;">
+                <p style="margin:0.5rem 0;"><strong>Name:</strong> ${name}</p>
+                <p style="margin:0.5rem 0;"><strong>Roll:</strong> ${rollNo}</p>
+                <p style="margin:0.5rem 0;"><strong>Department:</strong> ${dept}</p>
+                <p style="margin:0.5rem 0;"><strong>CGPA:</strong> ${cgpa}</p>
+                <p style="margin:0.5rem 0;"><strong>Status:</strong> ${status}</p>
+            </div>
+            <div style="text-align:center; margin-top:2rem;">
+                <button onclick="closeStudentProfile()" style="background:#3b82f6; color:white; padding:0.75rem 1.5rem; border:none; border-radius:8px; cursor:pointer; font-weight:600;">Close</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        alert('Logging out...');
+        setTimeout(() => {
+            window.location.href = '../pages/login-page.html';
+        }, 1000);
+    }
+}
+
+function closeStudentProfile() {
+    const modal = document.getElementById('studentProfileModal');
+    if (modal) {
+        modal.remove();
+    }
 }
 </script>
 
@@ -2913,7 +3266,7 @@ function showDashboard() {
 <span class="material-symbols-outlined">settings</span>
 <h3>Settings</h3>
 </a>
-<a href="#">
+<a href="#" onclick="logout(); return false;">
 <span class="material-symbols-outlined">logout</span>
 <h3>Logout</h3>
 </a>
@@ -4779,7 +5132,7 @@ View All Alerts
 
 <div class="form-actions">
 <button type="button" onclick="registerStudent()" class="btn-primary">Register Student</button>
-<button type="reset" class="btn-secondary">Clear Form</button>
+<button type="button" onclick="clearForm()" class="btn-secondary">Clear Form</button>
 </div>
 </div>
 </div>
@@ -4789,14 +5142,14 @@ View All Alerts
 <div class="bulk-upload">
 <div class="upload-section">
 <h3>Bulk Student Upload</h3>
-<div class="upload-area">
+<div class="upload-area" ondrop="dropHandler(event)" ondragover="dragOverHandler(event)" ondragleave="dragLeaveHandler(event)" style="padding:4rem; border:2px dashed #cbd5e1; border-radius:16px; background:#f0f9ff; margin-bottom:1.5rem; transition:all 0.3s ease; position:relative; overflow:hidden;">
 <div class="upload-icon">
-<span class="material-symbols-outlined">cloud_upload</span>
+<span class="material-symbols-outlined" style="font-size:3rem; color:#64748b;">cloud_upload</span>
 </div>
-<p>Drag and drop your Excel/CSV file here or click to browse</p>
-<input type="file" accept=".xlsx,.xls,.csv" class="bulk-file-input">
-<button class="upload-btn" onclick="document.querySelector('.bulk-file-input').click()">Choose File</button>
-<button onclick="processBulkUpload()" style="background:#3b82f6; color:white; padding:1rem 2rem; border:none; border-radius:12px; font-weight:600; cursor:pointer; margin-top:1rem;">Upload & Process</button>
+<p id="uploadText" style="margin:0 0 1rem 0; color:#64748b;">Drag and drop your Excel/CSV file here or click to browse</p>
+<input type="file" accept=".xlsx,.xls,.csv" class="bulk-file-input" style="display:none;" onchange="handleFileSelect(event)">
+<button class="upload-btn" onclick="document.querySelector('.bulk-file-input').click()" style="background:#10b981; color:white; padding:1rem 2rem; border:none; border-radius:12px; font-weight:600; cursor:pointer; margin-right:1rem;">Choose File</button>
+<button onclick="processBulkUpload()" style="background:#3b82f6; color:white; padding:1rem 2rem; border:none; border-radius:12px; font-weight:600; cursor:pointer;">Upload & Process</button>
 </div>
 <div class="upload-info" style="text-align:center; margin-top:1rem;">
 <p style="display:flex;align-items:center;justify-content:center;gap:0.5rem;"><span style="color:#3b82f6; font-weight:600;">i</span> Supported formats: .xlsx, .xls, .csv</p>
@@ -4814,7 +5167,7 @@ View All Alerts
 <div style="margin-bottom:2rem;">
 <div style="position:relative; max-width:400px;">
 <span class="material-symbols-outlined" style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#9ca3af; pointer-events:none; z-index:10;">search</span>
-<input type="text" placeholder="Search students by name or roll number..." style="width:100%; padding:1rem 1rem 1rem 3rem; border:2px solid #e5e7eb; border-radius:12px; font-size:0.875rem; outline:none; transition:all 0.3s ease; box-shadow:0 2px 4px rgba(0,0,0,0.05); background:transparent;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102,126,234,0.15), 0 4px 12px rgba(0,0,0,0.1)'; this.style.transform='translateY(-1px)';" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)';">
+<input type="text" placeholder="Search students by name or roll number..." style="width:100%; padding:1rem 1rem 1rem 3rem; border:2px solid #e5e7eb; border-radius:12px; font-size:0.875rem; outline:none; transition:all 0.3s ease; box-shadow:0 2px 4px rgba(0,0,0,0.05); background:transparent;" onfocus="this.style.borderColor='#667eea'; this.style.boxShadow='0 0 0 4px rgba(102,126,234,0.15), 0 4px 12px rgba(0,0,0,0.1)'; this.style.transform='translateY(-1px)';" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)'; this.style.transform='translateY(0)';" oninput="searchStudents()">
 </div>
 </div>
 
