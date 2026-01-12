@@ -425,6 +425,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**© 2024 GEHU Placement Portal - Advanced Placement Management System. All Rights Reserved.**
+**© 2026 GEHU Placement Portal - Advanced Placement Management System. All Rights Reserved.**
 
 </div>
