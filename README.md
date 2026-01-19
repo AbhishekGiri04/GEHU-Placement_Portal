@@ -121,54 +121,54 @@ GEHU Placement Portal follows a traditional *RDBMS* (Relational database schema)
 ```mermaid
 graph TB
     %% ============================================
-    %% VISUAL REPRESENTATION OF ER DIAGRAM
+    %% ENHANCED ER DIAGRAM WITH BETTER STYLING
     %% ============================================
 
     %% ========== ENTITY BOXES ==========
     
-    subgraph "ENTITIES"
-        ADMIN["<center><b>ADMINS</b></center><br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR (UK)<br/>phone: VARCHAR<br/>password: VARCHAR<br/>created_at: TIMESTAMP"]
+    subgraph "DATABASE ENTITIES"
+        ADMIN["ADMINS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR (UK)<br/>phone: VARCHAR<br/>password: VARCHAR<br/>created_at: TIMESTAMP"]
         
-        COMPANY["<center><b>COMPANIES</b></center><br/>id: BIGINT (PK)<br/>name: VARCHAR (UK)<br/>email: VARCHAR<br/>phone: VARCHAR<br/>website: VARCHAR<br/>password: VARCHAR<br/>status: ENUM"]
+        COMPANY["COMPANIES<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR (UK)<br/>email: VARCHAR<br/>phone: VARCHAR<br/>website: VARCHAR<br/>password: VARCHAR<br/>status: ENUM"]
         
-        STUDENT["<center><b>STUDENTS</b></center><br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR<br/>phone: VARCHAR<br/>course: VARCHAR<br/>year: INT<br/>cgpa: DECIMAL<br/>password: VARCHAR<br/>resume_path: VARCHAR"]
+        STUDENT["STUDENTS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR<br/>phone: VARCHAR<br/>course: VARCHAR<br/>year: INT<br/>cgpa: DECIMAL<br/>password: VARCHAR<br/>resume_path: VARCHAR"]
         
-        EVENT["<center><b>EVENTS</b></center><br/>id: BIGINT (PK)<br/>title: VARCHAR<br/>description: TEXT<br/>company_name: VARCHAR<br/>event_date: DATE<br/>location: VARCHAR<br/>requirements: TEXT<br/>created_at: TIMESTAMP"]
+        EVENT["EVENTS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>title: VARCHAR<br/>description: TEXT<br/>company_name: VARCHAR<br/>event_date: DATE<br/>location: VARCHAR<br/>requirements: TEXT<br/>created_at: TIMESTAMP"]
         
-        PARTICIPATION["<center><b>PARTICIPATIONS</b></center><br/>id: BIGINT (PK)<br/>student_id: BIGINT (FK)<br/>event_id: BIGINT (FK)<br/>status: ENUM<br/>applied_at: TIMESTAMP"]
+        PARTICIPATION["PARTICIPATIONS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>student_id: BIGINT (FK)<br/>event_id: BIGINT (FK)<br/>status: ENUM<br/>applied_at: TIMESTAMP"]
         
-        MESSAGE["<center><b>MESSAGES</b></center><br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR<br/>subject: VARCHAR<br/>message: TEXT<br/>is_read: BOOLEAN<br/>created_at: TIMESTAMP"]
+        MESSAGE["MESSAGES<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR<br/>subject: VARCHAR<br/>message: TEXT<br/>is_read: BOOLEAN<br/>created_at: TIMESTAMP"]
     end
 
     %% ========== RELATIONSHIPS ==========
     
-    ORG["<center>ORGANIZES<br/>(1:N)</center>"]
-    REG["<center>APPLIES_FOR<br/>(M:N)</center>"]
-    HAS["<center>HAS_APPLICATIONS<br/>(1:N)</center>"]
+    ORG["ORGANIZES<br/>One-to-Many<br/>(1:N)"]
+    REG["APPLIES_FOR<br/>Many-to-Many<br/>(M:N)"]
+    HAS["HAS_APPLICATIONS<br/>One-to-Many<br/>(1:N)"]
 
     %% ========== CONNECTIONS ==========
     
-    COMPANY --> ORG
-    ORG --> EVENT
+    COMPANY -.->|creates| ORG
+    ORG -.->|generates| EVENT
     
-    STUDENT --> REG
-    REG --> PARTICIPATION
+    STUDENT -.->|submits| REG
+    REG -.->|creates| PARTICIPATION
     
-    EVENT --> HAS
-    HAS --> PARTICIPATION
+    EVENT -.->|receives| HAS
+    HAS -.->|tracks| PARTICIPATION
 
-    %% ========== STYLING ==========
+    %% ========== ENHANCED STYLING ==========
     
-    style ADMIN fill:#E3F2FD,color:#000,stroke:#1976D2,stroke-width:2px
-    style COMPANY fill:#E8F5E8,color:#000,stroke:#388E3C,stroke-width:2px
-    style STUDENT fill:#FFF3E0,color:#000,stroke:#F57C00,stroke-width:2px
-    style EVENT fill:#F3E5F5,color:#000,stroke:#7B1FA2,stroke-width:2px
-    style PARTICIPATION fill:#E0F2F1,color:#000,stroke:#00695C,stroke-width:2px
-    style MESSAGE fill:#FCE4EC,color:#000,stroke:#C2185B,stroke-width:2px
+    style ADMIN fill:#E8F4FD,stroke:#1976D2,stroke-width:3px,color:#000
+    style COMPANY fill:#E8F5E8,stroke:#388E3C,stroke-width:3px,color:#000
+    style STUDENT fill:#FFF8E1,stroke:#F57C00,stroke-width:3px,color:#000
+    style EVENT fill:#F3E5F5,stroke:#7B1FA2,stroke-width:3px,color:#000
+    style PARTICIPATION fill:#E0F2F1,stroke:#00695C,stroke-width:3px,color:#000
+    style MESSAGE fill:#FCE4EC,stroke:#C2185B,stroke-width:3px,color:#000
     
-    style ORG fill:#FFF9C4,color:#000,stroke:#F57F17,stroke-width:1px
-    style REG fill:#FFF9C4,color:#000,stroke:#F57F17,stroke-width:1px
-    style HAS fill:#FFF9C4,color:#000,stroke:#F57F17,stroke-width:1px
+    style ORG fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    style REG fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
+    style HAS fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
 
     %% ========== LEGEND ==========
     
@@ -179,6 +179,12 @@ graph TB
         L4["1:N = One to Many"]
         L5["M:N = Many to Many"]
     end
+    
+    style L1 fill:#E3F2FD,color:#000
+    style L2 fill:#E3F2FD,color:#000
+    style L3 fill:#E3F2FD,color:#000
+    style L4 fill:#E3F2FD,color:#000
+    style L5 fill:#E3F2FD,color:#000
 ```
 
 <br>
@@ -186,31 +192,54 @@ graph TB
 ###  Data Flow Diagram
 
 ```mermaid
-graph LR
-    subgraph "User Entities"
-        S[Student]
-        C[Company]
-        A[Admin]
+graph TB
+    %% ============================================
+    %% ENHANCED DATA FLOW DIAGRAM
+    %% ============================================
+
+    subgraph "USER ROLES"
+        S["STUDENT<br/>━━━━━━━━━━━━━━<br/>• Profile Management<br/>• Event Applications<br/>• Resume Upload<br/>• Status Tracking"]
+        C["COMPANY<br/>━━━━━━━━━━━━━━<br/>• Event Creation<br/>• Candidate Review<br/>• Interview Scheduling<br/>• Selection Process"]
+        A["ADMIN<br/>━━━━━━━━━━━━━━<br/>• User Management<br/>• System Oversight<br/>• Analytics & Reports<br/>• Policy Enforcement"]
     end
     
-    subgraph "Core Process"
-        S -->|Applies for| E[Event]
-        C -->|Creates| E
-        E -->|Generates| P[Participation Record]
+    subgraph "CORE PROCESSES"
+        E["PLACEMENT EVENTS<br/>━━━━━━━━━━━━━━━━━━━━<br/>• Job Descriptions<br/>• Eligibility Criteria<br/>• Application Deadlines<br/>• Interview Schedules"]
+        P["PARTICIPATION<br/>━━━━━━━━━━━━━━━━━━━━<br/>• Application Status<br/>• Selection Rounds<br/>• Interview Results<br/>• Final Outcomes"]
+        M["COMMUNICATION<br/>━━━━━━━━━━━━━━━━━━━━<br/>• System Messages<br/>• Status Updates<br/>• Notifications<br/>• Announcements"]
     end
     
-    subgraph "Communication"
-        A -->|Manages| M[Messages]
-        C -->|Sends| M
-        S -->|Receives| M
+    subgraph "DATA ANALYTICS"
+        D["DASHBOARD METRICS<br/>━━━━━━━━━━━━━━━━━━━━<br/>• Placement Statistics<br/>• Success Rates<br/>• Company Participation<br/>• Student Performance"]
     end
+
+    %% ========== ENHANCED CONNECTIONS ==========
     
-    style S fill:#FFF3E0,color:#000,stroke:#F57C00,stroke-width:2px
-    style C fill:#E8F5E8,color:#000,stroke:#388E3C,stroke-width:2px
-    style A fill:#E3F2FD,color:#000,stroke:#1976D2,stroke-width:2px
-    style E fill:#F3E5F5,color:#000,stroke:#7B1FA2,stroke-width:2px
-    style P fill:#E0F2F1,color:#000,stroke:#00695C,stroke-width:2px
-    style M fill:#FCE4EC,color:#000,stroke:#C2185B,stroke-width:2px
+    S -.->|Applies for| E
+    C -.->|Creates & Manages| E
+    A -.->|Oversees & Approves| E
+    
+    E -.->|Generates| P
+    S -.->|Tracks Progress| P
+    C -.->|Reviews Applications| P
+    
+    A -.->|Broadcasts| M
+    C -.->|Sends Updates| M
+    S -.->|Receives Notifications| M
+    
+    P -.->|Feeds Data| D
+    E -.->|Provides Metrics| D
+    A -.->|Analyzes Trends| D
+
+    %% ========== ENHANCED STYLING ==========
+    
+    style S fill:#FFF8E1,stroke:#F57C00,stroke-width:4px,color:#000
+    style C fill:#E8F5E8,stroke:#388E3C,stroke-width:4px,color:#000
+    style A fill:#E8F4FD,stroke:#1976D2,stroke-width:4px,color:#000
+    style E fill:#F3E5F5,stroke:#7B1FA2,stroke-width:4px,color:#000
+    style P fill:#E0F2F1,stroke:#00695C,stroke-width:4px,color:#000
+    style M fill:#FCE4EC,stroke:#C2185B,stroke-width:4px,color:#000
+    style D fill:#FFF3E0,stroke:#FF9800,stroke-width:4px,color:#000
 ```
 
 <br>
@@ -541,7 +570,7 @@ GET  /api/admin/analytics          # Placement statistics
 <div align="center">
 
 <b>👤 Development Team</b>  
-<a href="https://www.linkedin.com/in/abhishek-giri-04/">
+<a href="https://www.linkedin.com/in/abhishek-giri04/">
   <img src="https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
 </a>  
 <a href="https://github.com/AbhishekGiri04">
