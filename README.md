@@ -22,22 +22,22 @@
 
 Traditional campus placement systems are plagued by inefficiencies that hinder both students and recruiters:
 
-**🔄 Manual Coordination Chaos**
+**Manual Coordination Chaos**
 - Placement officers juggle 100+ emails per company recruitment drive
 - Students repeatedly fill identical forms across multiple platforms
 - Critical updates get lost in email chains and WhatsApp groups
 
-**📊 Fragmented Data Management**
+**Fragmented Data Management**
 - Student information scattered across Excel sheets and paper records
 - No centralized tracking of application statuses or placement metrics
 - Manual data entry leads to errors and missed opportunities
 
-**⏰ Time-Intensive Processes**
+**Time-Intensive Processes**
 - 70% of placement officer time spent on administrative tasks
 - Repetitive manual work for each company visit
 - Delayed communication affects placement timelines
 
-**📈 Limited Scalability & Analytics**
+**Limited Scalability & Analytics**
 - Difficulty managing multiple simultaneous recruitment drives
 - No insights into placement trends or success patterns
 - Compliance risks due to manual documentation processes
@@ -52,25 +52,25 @@ Traditional campus placement systems are plagued by inefficiencies that hinder b
 
 GEHU Placement Portal transforms campus recruitment through intelligent automation and centralized management:
 
-### 🎓 **Student Experience Revolution**
+### **Student Experience Revolution**
 - **One-Click Applications**: Apply to multiple drives with a single comprehensive profile
 - **Real-Time Tracking**: Monitor application progress from submission to final selection
 - **Smart Matching**: Get personalized job recommendations based on skills and eligibility
 - **Digital Resume Hub**: Secure cloud storage with version control and easy sharing
 
-### 🏢 **Company Recruitment Efficiency**
+### **Company Recruitment Efficiency**
 - **Streamlined Onboarding**: Single registration process with automated approval workflows
 - **Intelligent Filtering**: Advanced candidate search by CGPA, department, skills, and experience
 - **Automated Scheduling**: Seamless coordination of assessments, interviews, and campus visits
 - **Compliance Assurance**: Built-in adherence to institutional placement policies
 
-### 👨‍💼 **Administrative Excellence**
+### **Administrative Excellence**
 - **Unified Dashboard**: Complete oversight of students, companies, and placement drives
 - **Bulk Operations**: Excel/CSV import for mass student registration and data management
 - **Real-Time Analytics**: Live placement statistics, success rates, and performance metrics
 - **Policy Engine**: Configurable rules for eligibility, deadlines, and approval processes
 
-### 🚀 **Enterprise-Grade Technology**
+### **Enterprise-Grade Technology**
 - **Secure Architecture**: JWT authentication, role-based access, and data encryption
 - **API-First Design**: RESTful services enabling future HR system integrations
 - **Audit Trail**: Complete transaction logging for transparency and compliance
@@ -82,11 +82,11 @@ GEHU Placement Portal transforms campus recruitment through intelligent automati
 
 ---
 
-## 🏗️ System Architecture
+## ⚙️ System Architecture
 
 GEHU Placement Portal follows a modern **three-tier architecture** with clear separation of concerns, ensuring scalability, maintainability, and security.
 
-### 🎯 High-Level Architecture Diagram
+###  High-Level Architecture Diagram
 
 <p align="center">
   <img src="assets/Architecture-Diagram.png" width="85%" alt="High-Level Architecture Diagram"/>
@@ -98,7 +98,7 @@ GEHU Placement Portal follows a modern **three-tier architecture** with clear se
 
 <br>
 
-### 🔄 Detailed Service Architecture
+###  Detailed Service Architecture
 
 <p align="center">
   <img src="assets/Detailed-Service-Architecture.png" width="85%" alt="Detailed Service Architecture"/>
@@ -116,7 +116,7 @@ GEHU Placement Portal follows a modern **three-tier architecture** with clear se
 
 GEHU Placement Portal follows a traditional *RDBMS* (Relational database schema), implemented with *MySQL* having multiple entities participating in relationships for ensuring scalability, maintainability, and security.
 
-### 🎯 VISUAL REPRESENTATION OF ER DIAGRAM
+###  VISUAL REPRESENTATION OF ER DIAGRAM
 
 ```mermaid
 graph TB
@@ -183,7 +183,7 @@ graph TB
 
 <br>
 
-### 🔄 Data Flow Diagram
+###  Data Flow Diagram
 
 ```mermaid
 graph LR
@@ -385,28 +385,28 @@ GEHU-Placement Portal/
 
 ## 📸 Application Screenshots
 
-### 🏠 Home Page
+###  Home Page
 <p align="center">
   <img src="docs/Home_Page.png" width="85%" alt="Home Page"/>
 </p>
 
 <br>
 
-### 👨🎓 Student Portal
+###  Student Portal
 <p align="center">
   <img src="docs/Student_Dashboard.png" width="85%" alt="Student Dashboard"/>
 </p>
 
 <br>
 
-### 🏢 Company Portal
+###  Company Portal
 <p align="center">
   <img src="docs/Company_Dashboard.png" width="85%" alt="Company Dashboard"/>
 </p>
 
 <br>
 
-### 👨💼 Admin Portal
+###  Admin Portal
 <p align="center">
    <img src="docs/Admin_Dashboard.png" width="85%" alt="Admin Dashboard"/>
 </p>
@@ -538,13 +538,13 @@ GET  /api/admin/analytics          # Placement statistics
 <div align="center">
 
 <b>👤 Development Team</b>  
-<a href="https://www.linkedin.com/in/abhishek-giri-b12345678/">
+<a href="https://www.linkedin.com/in/abhishek-giri-04/">
   <img src="https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
 </a>  
 <a href="https://github.com/AbhishekGiri04">
   <img src="https://img.shields.io/badge/Follow%20on-GitHub-black?style=for-the-badge&logo=github" alt="GitHub"/>
 </a>  
-<a href="mailto:placement@gehu.ac.in">
+<a href="mailto:abhishekgiri1978@gmail.com">
   <img src="https://img.shields.io/badge/Email-Support-red?style=for-the-badge&logo=gmail" alt="Email"/>
 </a>
 
@@ -567,6 +567,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**© 2025 GEHU Placement Portal - Advanced Placement Management System. All Rights Reserved.**
+**© 2026 GEHU Placement Portal - Advanced Placement Management System. All Rights Reserved.**
 
 </div>
