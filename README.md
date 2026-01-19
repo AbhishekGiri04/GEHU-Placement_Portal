@@ -89,7 +89,7 @@ GEHU Placement Portal follows a modern **three-tier architecture** with clear se
 ###  High-Level Architecture Diagram
 
 <p align="center">
-  <img src="assets/Architecture-Diagram.png" width="85%" alt="High-Level Architecture Diagram"/>
+  <img src="assets/images/Architecture-Diagram.png" width="85%" alt="High-Level Architecture Diagram"/>
 </p>
 
 <p align="center">
@@ -101,7 +101,7 @@ GEHU Placement Portal follows a modern **three-tier architecture** with clear se
 ###  Detailed Service Architecture
 
 <p align="center">
-  <img src="assets/Detailed-Service-Architecture.png" width="85%" alt="Detailed Service Architecture"/>
+  <img src="assets/images/Detailed-Service-Architecture.png" width="85%" alt="Detailed Service Architecture"/>
 </p>
 
 <p align="center">
@@ -309,18 +309,21 @@ graph LR
 ```
 GEHU-Placement Portal/
 ├── assets/                        # Static assets and media
-│   ├── accenture-logo.png         # Accenture company logo
-│   ├── amazon-logo.jpg            # Amazon company logo
-│   ├── deshaw-logo.png            # DE Shaw company logo
-│   ├── favicon.png                # Site favicon
-│   ├── google-logo.png            # Google company logo
-│   ├── infosys-logo.jpg           # Infosys company logo
-│   ├── main-building.jpg          # University campus images
-│   ├── microsoft-logo.png         # Microsoft company logo
-│   ├── navbar-logo.png            # Navigation branding
-│   ├── tcs-logo.png               # TCS company logo
-│   ├── visa-logo.png              # Visa company logo
-│   └── wipro-logo.png             # Wipro company logo
+│   └── images/                    # Company logos and university images
+│       ├── accenture-logo.png     # Accenture company logo
+│       ├── amazon-logo.jpg        # Amazon company logo
+│       ├── Architecture-Diagram.png # High-level architecture diagram
+│       ├── deshaw-logo.png        # DE Shaw company logo
+│       ├── Detailed-Service-Architecture.png # Detailed service architecture
+│       ├── favicon.png            # Site favicon
+│       ├── google-logo.png        # Google company logo
+│       ├── infosys-logo.jpg       # Infosys company logo
+│       ├── main-building.jpg      # University campus images
+│       ├── microsoft-logo.png     # Microsoft company logo
+│       ├── navbar-logo.png        # Navigation branding
+│       ├── tcs-logo.png           # TCS company logo
+│       ├── visa-logo.png          # Visa company logo
+│       └── wipro-logo.png         # Wipro company logo
 ├── backend/                       # Node.js backend service
 │   ├── config/                    # Configuration files
 │   │   └── database.js            # MySQL connection configuration
