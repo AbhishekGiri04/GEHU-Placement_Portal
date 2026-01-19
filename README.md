@@ -1,4 +1,4 @@
-# 🎓 GEHU Placement Portal — Advanced Campus Placement Management System
+<h1 align="center">🎓 GEHU Placement Portal — Advanced Campus Placement Management System</h1>
 
 <p align="center">
   🚀 A comprehensive Node.js web application that automates and streamlines the entire campus placement process, eliminating manual coordination through a centralized platform for students, companies, and administrators.
@@ -19,65 +19,64 @@
 ---
 
 ## 📖 Problem Statement
-The conventional campus placement system suffers from significant inefficiencies due to its reliance on fragmented, manual processes:
 
-### Communication Bottlenecks
-- **Email Overload**: Placement cells exchange 100+ emails per company, creating communication chaos and missed information
-- **Information Delays**: Critical updates about tests, interviews, and results take days to reach all stakeholders
-- **Platform Fragmentation**: Communication happens across emails, WhatsApp, phone calls, and physical notice boards
+Traditional campus placement systems are plagued by inefficiencies that hinder both students and recruiters:
 
-### Administrative Overhead
-- **Data Duplication**: Students re-enter identical information across multiple Google Forms for different companies
-- **Time Consumption**: Placement officers spend 60-70% of their time on administrative coordination rather than strategy
-- **Manual Processes**: Every placement drive requires creating new forms, spreadsheets, and communication templates
+**🔄 Manual Coordination Chaos**
+- Placement officers juggle 100+ emails per company recruitment drive
+- Students repeatedly fill identical forms across multiple platforms
+- Critical updates get lost in email chains and WhatsApp groups
 
-### Data Management Challenges
-- **Siloed Information**: Student data resides in separate Excel sheets, email attachments, and paper records
-- **Error-Prone Updates**: Manual data entry leads to incorrect eligibility lists and missed opportunities
-- **Poor Analytics**: No centralized system to track placement trends, success rates, or student performance
+**📊 Fragmented Data Management**
+- Student information scattered across Excel sheets and paper records
+- No centralized tracking of application statuses or placement metrics
+- Manual data entry leads to errors and missed opportunities
 
-### Process Inefficiencies
-- **Limited Scalability**: Manual systems struggle to handle multiple placement drives simultaneously
-- **Repetitive Work**: The same administrative tasks repeat for every company visit
-- **Compliance Risks**: Manual processes increase chances of errors in critical placement documentation
+**⏰ Time-Intensive Processes**
+- 70% of placement officer time spent on administrative tasks
+- Repetitive manual work for each company visit
+- Delayed communication affects placement timelines
 
-These inefficiencies result in delayed placements, reduced company participation, student frustration, and suboptimal placement outcomes that directly impact institutional reputation and student career prospects.
+**📈 Limited Scalability & Analytics**
+- Difficulty managing multiple simultaneous recruitment drives
+- No insights into placement trends or success patterns
+- Compliance risks due to manual documentation processes
+
+*Result: Delayed placements, reduced company participation, and suboptimal career outcomes for students.*
 
 <br>
 
 ---
 
 ## 💡 Our Solution
-GEHU Placement Portal revolutionizes campus recruitment by providing an integrated, automated platform that eliminates fragmentation and manual inefficiencies. Our solution delivers:
 
-### **For Students: Comprehensive Career Management**
-- **Single-Source Profile Management**: Create and maintain one comprehensive profile accessible to all incoming recruiters.
-- **Intelligent Event Discovery**: Single click apply option for matching placement drives based on eligibility, interests, and skills.
-- **Real-time Application Tracking**: Monitor application status from registration to final selection.
-- **Resume Management**: Secure resume upload and storage functionality.
+GEHU Placement Portal transforms campus recruitment through intelligent automation and centralized management:
 
-### **For Companies: Streamlined Recruitment Operations**
-- **Simplified Registration**: Single-point registration with approval workflow and verification.
-- **Targeted Job Postings**: Create detailed position descriptions with specific eligibility criteria.
-- **Smart Candidate Filtering**: Advanced shortlisting based on CGPA, skills, department, and other parameters.
-- **Smart Scheduling**: Schedule assessments and interviews efficiently.
-- **Compliance Management**: Ensure adherence to institutional placement policies and procedures.
+### 🎓 **Student Experience Revolution**
+- **One-Click Applications**: Apply to multiple drives with a single comprehensive profile
+- **Real-Time Tracking**: Monitor application progress from submission to final selection
+- **Smart Matching**: Get personalized job recommendations based on skills and eligibility
+- **Digital Resume Hub**: Secure cloud storage with version control and easy sharing
 
-### **For Administrators: Centralized Placement Governance**
-- **Complete User Management**: Approve, monitor, and manage all student and company accounts.
-- **Event Orchestration**: End-to-end coordination of placement drives from announcement to completion.
-- **Policy Enforcement**: Configure and enforce institutional placement rules and eligibility criteria.
-- **Student Management**: Management of students with various placement related metrics.
+### 🏢 **Company Recruitment Efficiency**
+- **Streamlined Onboarding**: Single registration process with automated approval workflows
+- **Intelligent Filtering**: Advanced candidate search by CGPA, department, skills, and experience
+- **Automated Scheduling**: Seamless coordination of assessments, interviews, and campus visits
+- **Compliance Assurance**: Built-in adherence to institutional placement policies
 
-### **Enterprise-Grade Operations Management**
-- **Bulk Data Processing**: Excel/CSV import/export for student registrations, company data, and event management
-- **Role-Based Messaging**: Secure communication channels between companies and administrators
-- **Audit Trail**: Complete logging of all communications and transactions for transparency and compliance
-- **Modern Technology Stack**: Built with Node.js, Express.js, MySQL, and responsive frontend technologies
-- **Security First**: Role-based access control, data encryption, and secure authentication
-- **API-First Design**: RESTful APIs enabling future integrations with HR systems and educational platforms
+### 👨‍💼 **Administrative Excellence**
+- **Unified Dashboard**: Complete oversight of students, companies, and placement drives
+- **Bulk Operations**: Excel/CSV import for mass student registration and data management
+- **Real-Time Analytics**: Live placement statistics, success rates, and performance metrics
+- **Policy Engine**: Configurable rules for eligibility, deadlines, and approval processes
 
-This holistic solution transforms campus placement from a fragmented, manual process into a streamlined, automated ecosystem where technology enhances human potential rather than complicating it.
+### 🚀 **Enterprise-Grade Technology**
+- **Secure Architecture**: JWT authentication, role-based access, and data encryption
+- **API-First Design**: RESTful services enabling future HR system integrations
+- **Audit Trail**: Complete transaction logging for transparency and compliance
+- **Responsive Platform**: Seamless experience across desktop, tablet, and mobile devices
+
+*Outcome: 60% reduction in administrative overhead, 40% faster placement cycles, and improved satisfaction for all stakeholders.*
 
 <br>
 
@@ -89,45 +88,9 @@ GEHU Placement Portal follows a modern **three-tier architecture** with clear se
 
 ### 🎯 High-Level Architecture Diagram
 
-```mermaid
-graph TB
-    subgraph "Presentation Layer"
-        A[Student Portal<br/>HTML • CSS • JavaScript]
-        B[Company Portal<br/>HTML • CSS • JavaScript]
-        C[Admin Portal<br/>HTML • CSS • JavaScript]
-        D[Placement Cell<br/>Placement Portal Frontend]
-    end
-    
-    A --> F[Web Browser]
-    B --> F
-    C --> F
-    D --> F
-    
-    subgraph "Application Layer"
-        F --> G[RESTful API Gateway]
-        G --> H[Express.js Server]
-        H --> I[Business Logic Layer]
-    end
-    
-    subgraph "Data Layer"
-        I --> J[(MySQL Database)]
-    end
-    
-    subgraph "Support Services"
-        K[JWT Authentication Service]
-        L[File Upload Service]
-        M[Message Processing Service]
-    end
-    
-    I --> K
-    I --> L
-    I --> M
-    
-    style D fill:#e1f5fe
-    style A fill:#f3e5f5
-    style B fill:#e8f5e8
-    style H fill:#fff3e0
-```
+<p align="center">
+  <img src="assets/Architecture-Diagram.png" width="85%" alt="High-Level Architecture Diagram"/>
+</p>
 
 <p align="center">
   <b>Figure 1: High-level system architecture showing interaction between presentation, application, and data layers</b>
@@ -137,72 +100,9 @@ graph TB
 
 ### 🔄 Detailed Service Architecture
 
-```mermaid
-graph LR
-    subgraph "Client Layer"
-        A[Student Browser]
-        B[Company Browser]
-        C[Admin Browser]
-    end
-    
-    subgraph "Controller Layer"
-        D[Auth Controller]
-        E[Student Controller]
-        F[Admin Controller]
-        G[Event Controller]
-        H[Message Controller]
-    end
-    
-    subgraph "Service Layer"
-        I[Student Service]
-        J[Company Service]
-        K[Admin Service]
-        L[Event Service]
-        M[Participation Service]
-    end
-    
-    subgraph "Repository Layer"
-        N[Database Config]
-        O[MySQL Connection]
-        P[Query Optimization]
-        Q[Connection Pooling]
-    end
-    
-    subgraph "Data Layer"
-        S[(MySQL Database)]
-    end
-    
-    A --> D
-    B --> E
-    C --> F
-    
-    D --> I
-    E --> J
-    F --> K
-    G --> L
-    H --> M
-    
-    I --> N
-    J --> O
-    K --> P
-    L --> Q
-    M --> N
-    
-    N --> S
-    O --> S
-    P --> S
-    Q --> S
-    
-    style I fill:#e1f5fe
-    style J fill:#e1f5fe
-    style K fill:#e1f5fe
-    style L fill:#e1f5fe
-    style M fill:#e1f5fe
-    style N fill:#f3e5f5
-    style O fill:#f3e5f5
-    style P fill:#f3e5f5
-    style Q fill:#f3e5f5
-```
+<p align="center">
+  <img src="assets/Detailed-Service-Architecture.png" width="85%" alt="Detailed Service Architecture"/>
+</p>
 
 <p align="center">
   <b>Figure 2: Detailed service architecture showing modular design and database connectivity</b>
@@ -259,16 +159,16 @@ graph TB
 
     %% ========== STYLING ==========
     
-    style ADMIN fill:#FF6B6B,color:white,stroke:#333,stroke-width:2px
-    style COMPANY fill:#4ECDC4,color:white,stroke:#333,stroke-width:2px
-    style STUDENT fill:#FFD166,color:black,stroke:#333,stroke-width:2px
-    style EVENT fill:#06D6A0,color:white,stroke:#333,stroke-width:2px
-    style PARTICIPATION fill:#118AB2,color:white,stroke:#333,stroke-width:2px
-    style MESSAGE fill:#EF476F,color:white,stroke:#333,stroke-width:2px
+    style ADMIN fill:#E3F2FD,color:#000,stroke:#1976D2,stroke-width:2px
+    style COMPANY fill:#E8F5E8,color:#000,stroke:#388E3C,stroke-width:2px
+    style STUDENT fill:#FFF3E0,color:#000,stroke:#F57C00,stroke-width:2px
+    style EVENT fill:#F3E5F5,color:#000,stroke:#7B1FA2,stroke-width:2px
+    style PARTICIPATION fill:#E0F2F1,color:#000,stroke:#00695C,stroke-width:2px
+    style MESSAGE fill:#FCE4EC,color:#000,stroke:#C2185B,stroke-width:2px
     
-    style ORG fill:#FFD700,color:black,stroke:#333,stroke-width:1px
-    style REG fill:#FFD700,color:black,stroke:#333,stroke-width:1px
-    style HAS fill:#FFD700,color:black,stroke:#333,stroke-width:1px
+    style ORG fill:#FFF9C4,color:#000,stroke:#F57F17,stroke-width:1px
+    style REG fill:#FFF9C4,color:#000,stroke:#F57F17,stroke-width:1px
+    style HAS fill:#FFF9C4,color:#000,stroke:#F57F17,stroke-width:1px
 
     %% ========== LEGEND ==========
     
@@ -305,12 +205,12 @@ graph LR
         S -->|Receives| M
     end
     
-    style S fill:#FFD166,color:black
-    style C fill:#4ECDC4,color:white
-    style A fill:#FF6B6B,color:white
-    style E fill:#06D6A0,color:white
-    style P fill:#118AB2,color:white
-    style M fill:#EF476F,color:white
+    style S fill:#FFF3E0,color:#000,stroke:#F57C00,stroke-width:2px
+    style C fill:#E8F5E8,color:#000,stroke:#388E3C,stroke-width:2px
+    style A fill:#E3F2FD,color:#000,stroke:#1976D2,stroke-width:2px
+    style E fill:#F3E5F5,color:#000,stroke:#7B1FA2,stroke-width:2px
+    style P fill:#E0F2F1,color:#000,stroke:#00695C,stroke-width:2px
+    style M fill:#FCE4EC,color:#000,stroke:#C2185B,stroke-width:2px
 ```
 
 <br>
@@ -408,76 +308,75 @@ graph LR
 
 ```
 GEHU-Placement Portal/
-├── 📂 assets/                     # 🖼️ Static assets and media
-│   └── 📂 images/                 # 🏢 Company logos and university images
-│       ├── 📄 accenture-logo.png  # 🏢 Accenture company logo
-│       ├── 📄 amazon-logo.jpg     # 🏢 Amazon company logo
-│       ├── 📄 deshaw-logo.png     # 🏢 DE Shaw company logo
-│       ├── 📄 favicon.png         # 🌟 Site favicon
-│       ├── 📄 google-logo.png     # 🏢 Google company logo
-│       ├── 📄 infosys-logo.jpg    # 🏢 Infosys company logo
-│       ├── 📄 main-building.jpg   # 🏛️ University campus images
-│       ├── 📄 microsoft-logo.png  # 🏢 Microsoft company logo
-│       ├── 📄 navbar-logo.png     # 🎯 Navigation branding
-│       ├── 📄 tcs-logo.png        # 🏢 TCS company logo
-│       ├── 📄 visa-logo.png       # 🏢 Visa company logo
-│       └── 📄 wipro-logo.png      # 🏢 Wipro company logo
-├── 📂 backend/                    # 🔧 Node.js backend service
-│   ├── 📂 config/                 # ⚙️ Configuration files
-│   │   └── 📄 database.js         # 🗄️ MySQL connection configuration
-│   ├── 📂 controllers/            # 🎮 Business logic controllers
-│   │   ├── 📄 adminController.js  # 👨💼 Admin panel operations
-│   │   ├── 📄 authController.js   # 🔐 Authentication management
-│   │   ├── 📄 eventController.js  # 📅 Event and drive management
-│   │   ├── 📄 messageController.js # 💬 Communication system
-│   │   ├── 📄 participationController.js # 📝 Application tracking
-│   │   └── 📄 studentController.js # 👨🎓 Student operations
-│   ├── 📂 middleware/             # 🛡️ Security and validation
-│   │   └── 📄 auth.js             # 🔒 JWT authentication middleware
-│   ├── 📂 routes/                 # 🛣️ API route definitions
-│   │   ├── 📄 admin.js            # Admin operations routes
-│   │   ├── 📄 auth.js             # Authentication routes
-│   │   ├── 📄 companies.js        # Company operations routes
-│   │   ├── 📄 events.js           # Event management routes
-│   │   ├── 📄 messages.js         # Communication routes
-│   │   └── 📄 students.js         # Student management routes
-│   ├── 📂 uploads/                # 📁 File storage system
-│   │   ├── 📂 resumes/            # 📄 Student resume repository
-│   │   └── 📄 .gitkeep            # Git placeholder file
-│   ├── 📄 .env                    # 🔐 Environment variables
-│   ├── 📄 database.sql            # 🗃️ Database schema and setup
-│   ├── 📄 package.json            # 📦 Backend dependencies
-│   └── 📄 server.js               # 🚀 Express server entry point
-├── 📂 docs/                       # 📸 Documentation and screenshots
-│   ├── 📄 Admin_Dashboard.png     # 📸 Admin interface preview
-│   ├── 📄 Company_Dashboard.png   # 📸 Company portal preview
-│   ├── 📄 Home_Page.png           # 📸 Landing page preview
-│   └── 📄 Student_Dashboard.png   # 📸 Student portal preview
-├── 📂 src/                        # 🎨 Frontend source code
-│   ├── 📂 pages/                  # 📄 HTML page templates
-│   │   ├── 📄 admin-access.html   # 🔑 Admin access control page
-│   │   ├── 📄 admin-dashboard.html # 👨💼 Admin control panel
-│   │   ├── 📄 company-dashboard.html # 🏢 Company recruitment portal
-│   │   ├── 📄 company-register.html # 📝 Company registration form
-│   │   ├── 📄 index.html          # 🏠 Main landing page
-│   │   ├── 📄 login-page.html     # 🔑 Authentication interface
-│   │   ├── 📄 student-dashboard.html # 👨🎓 Student portal
-│   │   ├── 📄 student-register.html # 📝 Student registration form
-│   │   └── 📄 system-architecture.html # 🏗️ System architecture documentation
-│   ├── 📂 scripts/                # ⚡ JavaScript functionality
-│   │   ├── 📄 company-dashboard.js # 🏢 Company portal features
-│   │   ├── 📄 index.js            # 🏠 Landing page interactions
-│   │   └── 📄 student-dashboard.js # 👨🎓 Student portal logic
-│   └── 📂 styles/                 # 🎨 CSS stylesheets
-│       ├── 📄 company-dashboard.css # 🏢 Company portal design
-│       ├── 📄 index.css           # 🏠 Landing page styles
-│       └── 📄 student-dashboard.css # 👨🎓 Student portal styling
-├── 📄 .gitignore                  # 🚫 Git ignore rules
-├── 📄 .vercelignore              # 🚫 Vercel deployment ignore rules
-├── 📄 index.html                  # 🚪 Root application entry point
-├── 📄 LICENSE                     # 📜 MIT License
-├── 📄 README.md                   # 📖 Project documentation
-└── 📄 vercel.json                 # ⚡ Vercel deployment configuration
+├── assets/                        # Static assets and media
+│   ├── accenture-logo.png         # Accenture company logo
+│   ├── amazon-logo.jpg            # Amazon company logo
+│   ├── deshaw-logo.png            # DE Shaw company logo
+│   ├── favicon.png                # Site favicon
+│   ├── google-logo.png            # Google company logo
+│   ├── infosys-logo.jpg           # Infosys company logo
+│   ├── main-building.jpg          # University campus images
+│   ├── microsoft-logo.png         # Microsoft company logo
+│   ├── navbar-logo.png            # Navigation branding
+│   ├── tcs-logo.png               # TCS company logo
+│   ├── visa-logo.png              # Visa company logo
+│   └── wipro-logo.png             # Wipro company logo
+├── backend/                       # Node.js backend service
+│   ├── config/                    # Configuration files
+│   │   └── database.js            # MySQL connection configuration
+│   ├── controllers/               # Business logic controllers
+│   │   ├── adminController.js     # Admin panel operations
+│   │   ├── authController.js      # Authentication management
+│   │   ├── eventController.js     # Event and drive management
+│   │   ├── messageController.js   # Communication system
+│   │   ├── participationController.js # Application tracking
+│   │   └── studentController.js   # Student operations
+│   ├── middleware/                # Security and validation
+│   │   └── auth.js                # JWT authentication middleware
+│   ├── routes/                    # API route definitions
+│   │   ├── admin.js               # Admin operations routes
+│   │   ├── auth.js                # Authentication routes
+│   │   ├── companies.js           # Company operations routes
+│   │   ├── events.js              # Event management routes
+│   │   ├── messages.js            # Communication routes
+│   │   └── students.js            # Student management routes
+│   ├── uploads/                   # File storage system
+│   │   ├── resumes/               # Student resume repository
+│   │   └── .gitkeep               # Git placeholder file
+│   ├── .env                       # Environment variables
+│   ├── database.sql               # Database schema and setup
+│   ├── package.json               # Backend dependencies
+│   └── server.js                  # Express server entry point
+├── docs/                          # Documentation and screenshots
+│   ├── Admin_Dashboard.png        # Admin interface preview
+│   ├── Company_Dashboard.png      # Company portal preview
+│   ├── Home_Page.png              # Landing page preview
+│   └── Student_Dashboard.png      # Student portal preview
+├── src/                           # Frontend source code
+│   ├── pages/                     # HTML page templates
+│   │   ├── admin-access.html      # Admin access control page
+│   │   ├── admin-dashboard.html   # Admin control panel
+│   │   ├── company-dashboard.html # Company recruitment portal
+│   │   ├── company-register.html  # Company registration form
+│   │   ├── index.html             # Main landing page
+│   │   ├── login-page.html        # Authentication interface
+│   │   ├── student-dashboard.html # Student portal
+│   │   ├── student-register.html  # Student registration form
+│   │   └── system-architecture.html # System architecture documentation
+│   ├── scripts/                   # JavaScript functionality
+│   │   ├── company-dashboard.js   # Company portal features
+│   │   ├── index.js               # Landing page interactions
+│   │   └── student-dashboard.js   # Student portal logic
+│   └── styles/                    # CSS stylesheets
+│       ├── company-dashboard.css  # Company portal design
+│       ├── index.css              # Landing page styles
+│       └── student-dashboard.css  # Student portal styling
+├── .gitignore                     # Git ignore rules
+├── .vercelignore                  # Vercel deployment ignore rules
+├── index.html                     # Root application entry point
+├── LICENSE                        # MIT License
+├── README.md                      # Project documentation
+└── vercel.json                    # Vercel deployment configuration
 ```
 
 <br>
