@@ -243,7 +243,7 @@ GEHU-Placement_Portal/
 
 ```mermaid
 graph TD
-A["🌐 CLIENT LAYER (Browser)<br/>Vanilla HTML5 + CSS3 + JS"] -->|HTTP/REST API| B["⚙️ API GATEWAY (Express.js)<br/>Port 5000 — Request Validation & Routing"]
+A["🌐 CLIENT LAYER (Browser)<br/>Vanilla HTML5 + CSS3 + JS"] -->|HTTP/REST API| B["⚙️ API GATEWAY (Express.js)<br/>Port 3001 — Request Validation & Routing"]
 B --> C["🔐 AUTH MIDDLEWARE<br/>JWT Verification + Role Guard"]
 C --> D["📦 CONTROLLERS LAYER<br/>Student | Company | Admin | Auth | Events"]
 D --> E["🗄️ DATA LAYER (PostgreSQL)<br/>7 Tables — Render Hosted"]
@@ -501,6 +501,43 @@ erDiagram
 
 ---
 
+## 🌐 Live Demo
+
+<div align="center">
+
+<table>
+<tr>
+<td align="center" width="50%">
+<h3>🎨 Frontend Application</h3>
+<a href="https://gehuplacementportal.vercel.app" target="_blank">
+<img src="https://img.shields.io/badge/Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white"/>
+</a>
+<br/><br/>
+<b>URL:</b> <a href="https://gehuplacementportal.vercel.app">gehuplacementportal.vercel.app</a><br/>
+<b>Platform:</b> Vercel<br/>
+<b>Deploy:</b> Auto from <code>main</code> branch
+</td>
+<td align="center" width="50%">
+<h3>⚙️ Backend API</h3>
+<a href="https://gehu-placement-portal.onrender.com/api/health" target="_blank">
+<img src="https://img.shields.io/badge/API-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white"/>
+</a>
+<br/><br/>
+<b>URL:</b> <a href="https://gehu-placement-portal.onrender.com">gehu-placement-portal.onrender.com</a><br/>
+<b>Platform:</b> Render<br/>
+<b>Health Check:</b> <code>/api/health</code>
+</td>
+</tr>
+</table>
+
+<p style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 10px; margin: 20px 0;">
+💡 <b>Note:</b> Backend is on Render free tier — first request may take 30-50 seconds to wake up.
+</p>
+
+</div>
+
+---
+
 ## 🚀 Quick Start (Local)
 
 <div align="center">
@@ -529,9 +566,9 @@ cd GEHU-Placement_Portal
 # backend/.env
 DATABASE_URL=postgresql://user:password@host:5432/dbname
 JWT_SECRET=your_strong_secret_here
-PORT=5000
+PORT=3001
 NODE_ENV=development
-FRONTEND_URL=http://localhost:5000
+FRONTEND_URL=http://localhost:3001
 EMAIL_USER=your_gmail@gmail.com
 EMAIL_PASS=your_gmail_app_password
 ```
@@ -562,22 +599,29 @@ bash run.sh
 
 | 🌐 Service | 🔗 URL | 📝 Description |
 |---|---|---|
-| 🎨 Frontend | `http://localhost:5000` | Main application |
-| 📡 API | `http://localhost:5000/api` | REST API base |
+| 🎨 Frontend | `http://localhost:3001` | Main application |
+| 📡 API | `http://localhost:3001/api` | REST API base |
+| 💚 Health Check | `http://localhost:3001/api/health` | Server status |
 
 </div>
 
 ---
 
-## ☁️ Deployment (Render)
+## ☁️ Deployment
 
-### Database
-1. Create a PostgreSQL instance on [Render](https://render.com)
-2. Copy the **External Database URL**
-3. Run schema: `psql "your_external_url" -f backend/database.sql`
+### 🎨 Frontend — Vercel
 
-### Backend Web Service
-1. Create a new **Web Service** on Render
+**Live:** [gehuplacementportal.vercel.app](https://gehuplacementportal.vercel.app)
+
+1. Connect GitHub repo to [Vercel](https://vercel.com)
+2. No build command needed — static files served directly
+3. Auto-deploys on every push to `main`
+
+### ⚙️ Backend — Render
+
+**Live:** [gehu-placement-portal.onrender.com](https://gehu-placement-portal.onrender.com)
+
+1. Create a new **Web Service** on [Render](https://render.com)
 2. Connect your GitHub repository
 3. Set **Root Directory** to `backend`
 4. Set **Build Command**: `npm install`
@@ -587,9 +631,15 @@ bash run.sh
    DATABASE_URL = <your render postgres external url>
    JWT_SECRET   = <strong random string>
    NODE_ENV     = production
-   FRONTEND_URL = https://your-app.onrender.com
-   PORT         = 5000
+   FRONTEND_URL = https://gehuplacementportal.vercel.app
+   PORT         = 3001
    ```
+
+### 🗄️ Database — Render PostgreSQL
+
+1. Create a **PostgreSQL** instance on Render
+2. Copy the **External Database URL**
+3. Run schema: `psql "your_external_url" -f backend/database.sql`
 
 ---
 
