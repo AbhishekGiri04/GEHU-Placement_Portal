@@ -119,6 +119,99 @@ GEHU Placement Portal provides a centralized, automated platform with three role
 
 ---
 
+## 📁 Project Structure
+
+```
+GEHU-Placement_Portal/
+├── 📂 assets/                          # Static assets — logos & images
+│   ├── 🖼️ accenture-logo.png
+│   ├── 🖼️ amazon-logo.png
+│   ├── 🖼️ favicon.png
+│   ├── 🖼️ google-logo.png
+│   ├── 🖼️ infosys-logo.png
+│   ├── 🖼️ main-building.png
+│   ├── 🖼️ microsoft-logo.png
+│   ├── 🖼️ navbar-logo.png
+│   ├── 🖼️ tcs-logo.png
+│   ├── 🖼️ visa-logo.png
+│   └── 🖼️ wipro-logo.png
+├── 📂 backend/                         # Node.js + Express API Server
+│   ├── 📂 config/
+│   │   └── 📄 database.js              # PostgreSQL pool + execute() wrapper
+│   ├── 📂 controllers/
+│   │   ├── 📄 adminController.js       # Students, companies, events, analytics, messages, announcements
+│   │   ├── 📄 authController.js        # Login, register, forgot/reset password
+│   │   ├── 📄 companyController.js     # Company profile, drives, applicants, messages
+│   │   ├── 📄 eventController.js       # Public event browsing endpoints
+│   │   ├── 📄 messageController.js     # Message CRUD
+│   │   └── 📄 studentController.js     # Profile, applications, resume, dashboard
+│   ├── 📂 middleware/
+│   │   ├── 📄 auth.js                  # JWT token verification
+│   │   └── 📄 roleMiddleware.js        # Role-based access guard (student/company/admin)
+│   ├── 📂 routes/
+│   │   ├── 📄 admin.js                 # Admin routes
+│   │   ├── 📄 announcements.js         # Public GET announcements
+│   │   ├── 📄 auth.js                  # Auth routes (login, register, reset)
+│   │   ├── 📄 companies.js             # Company routes
+│   │   ├── 📄 events.js                # Public event routes
+│   │   ├── 📄 messages.js              # Message routes
+│   │   └── 📄 students.js              # Student routes
+│   ├── 📂 uploads/
+│   │   └── 📂 resumes/                 # Uploaded PDF resumes (gitkeep)
+│   ├── 📂 utils/
+│   │   └── 📄 emailService.js          # Nodemailer with graceful fallback
+│   ├── 📄 .env.example                 # Environment variables template
+│   ├── 📄 .gitignore
+│   ├── 📄 database.sql                 # PostgreSQL schema + sample data
+│   ├── 📄 package.json
+│   ├── 📄 package-lock.json
+│   └── 📄 server.js                    # Express app entry point
+├── 📂 docs/                            # Screenshots & diagrams
+│   ├── 🖼️ GEHU.png                     # Project banner
+│   ├── 🖼️ SystemDesign.png             # System architecture diagram
+│   ├── 🖼️ LandingPage.png
+│   ├── 🖼️ LoginPage.png
+│   ├── 🖼️ StudentDashboard.png
+│   ├── 🖼️ AdminDashboard.png
+│   ├── 🖼️ CompanyDashboard.png
+│   ├── 🖼️ StudentReg.png
+│   ├── 🖼️ CompanyReg.png
+│   └── 🖼️ AdminAccess.png
+├── 📂 frontend/                        # Vanilla HTML5 + CSS3 + JS Frontend
+│   ├── 📂 pages/
+│   │   ├── 📄 index.html               # Landing page
+│   │   ├── 📄 login-page.html          # Unified login (student/company/admin)
+│   │   ├── 📄 student-register.html    # Student registration form
+│   │   ├── 📄 company-register.html    # Company registration form
+│   │   ├── 📄 student-dashboard.html   # Student portal dashboard
+│   │   ├── 📄 company-dashboard.html   # Company portal dashboard
+│   │   ├── 📄 admin-dashboard.html     # Admin portal dashboard
+│   │   ├── 📄 admin-access.html        # Admin access/login page
+│   │   └── 📄 reset-password.html      # Password reset page
+│   ├── 📂 scripts/
+│   │   ├── 📄 api.js                   # Central fetch wrapper (Bearer token, 401 redirect)
+│   │   ├── 📄 auth.js                  # Login, logout, requireAuth, getUser, showToast
+│   │   ├── 📄 index.js                 # Landing page logic
+│   │   ├── 📄 admin.js                 # All admin dashboard logic
+│   │   ├── 📄 company.js               # All company dashboard logic
+│   │   └── 📄 student.js               # All student dashboard logic
+│   ├── 📂 styles/
+│   │   ├── 📄 index.css                # Landing & shared styles
+│   │   ├── 📄 student-dashboard.css    # Student portal styles
+│   │   └── 📄 company-dashboard.css    # Company portal styles
+│   └── 📄 .gitignore
+├── 📄 .gitignore
+├── 📄 .vercelignore
+├── 📄 backend.log                      # Application logs
+├── 📄 index.html                       # Root entry — redirects to frontend/pages/index.html
+├── 📄 LICENSE
+├── 📄 README.md
+├── 📄 run.sh                           # One-command local startup script
+└── 📄 vercel.json                      # Vercel deployment config
+```
+
+---
+
 ## 📸 Screenshots
 
 <table>
@@ -142,7 +235,7 @@ GEHU Placement Portal provides a centralized, automated platform with three role
 
 ---
 
-## 🏗️ System Architecture
+## 🛠️ System Architecture
 
 <div align="center">
 <img src="docs/SystemDesign.png" alt="System Design" width="100%" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);"/>
@@ -326,99 +419,6 @@ erDiagram
     EVENTS ||--o{ PARTICIPATION : "receives applications"
     ADMINS ||--o{ ANNOUNCEMENTS : "publishes"
     ADMINS ||--o{ MESSAGES : "replies to"
-```
-
----
-
-## 📁 Project Structure
-
-```
-GEHU-Placement_Portal/
-├── 📂 assets/                          # Static assets — logos & images
-│   ├── 🖼️ accenture-logo.png
-│   ├── 🖼️ amazon-logo.png
-│   ├── 🖼️ favicon.png
-│   ├── 🖼️ google-logo.png
-│   ├── 🖼️ infosys-logo.png
-│   ├── 🖼️ main-building.png
-│   ├── 🖼️ microsoft-logo.png
-│   ├── 🖼️ navbar-logo.png
-│   ├── 🖼️ tcs-logo.png
-│   ├── 🖼️ visa-logo.png
-│   └── 🖼️ wipro-logo.png
-├── 📂 backend/                         # Node.js + Express API Server
-│   ├── 📂 config/
-│   │   └── 📄 database.js              # PostgreSQL pool + execute() wrapper
-│   ├── 📂 controllers/
-│   │   ├── 📄 adminController.js       # Students, companies, events, analytics, messages, announcements
-│   │   ├── 📄 authController.js        # Login, register, forgot/reset password
-│   │   ├── 📄 companyController.js     # Company profile, drives, applicants, messages
-│   │   ├── 📄 eventController.js       # Public event browsing endpoints
-│   │   ├── 📄 messageController.js     # Message CRUD
-│   │   └── 📄 studentController.js     # Profile, applications, resume, dashboard
-│   ├── 📂 middleware/
-│   │   ├── 📄 auth.js                  # JWT token verification
-│   │   └── 📄 roleMiddleware.js        # Role-based access guard (student/company/admin)
-│   ├── 📂 routes/
-│   │   ├── 📄 admin.js                 # Admin routes
-│   │   ├── 📄 announcements.js         # Public GET announcements
-│   │   ├── 📄 auth.js                  # Auth routes (login, register, reset)
-│   │   ├── 📄 companies.js             # Company routes
-│   │   ├── 📄 events.js                # Public event routes
-│   │   ├── 📄 messages.js              # Message routes
-│   │   └── 📄 students.js              # Student routes
-│   ├── 📂 uploads/
-│   │   └── 📂 resumes/                 # Uploaded PDF resumes (gitkeep)
-│   ├── 📂 utils/
-│   │   └── 📄 emailService.js          # Nodemailer with graceful fallback
-│   ├── 📄 .env.example                 # Environment variables template
-│   ├── 📄 .gitignore
-│   ├── 📄 database.sql                 # PostgreSQL schema + sample data
-│   ├── 📄 package.json
-│   ├── 📄 package-lock.json
-│   └── 📄 server.js                    # Express app entry point
-├── 📂 docs/                            # Screenshots & diagrams
-│   ├── 🖼️ GEHU.png                     # Project banner
-│   ├── 🖼️ SystemDesign.png             # System architecture diagram
-│   ├── 🖼️ LandingPage.png
-│   ├── 🖼️ LoginPage.png
-│   ├── 🖼️ StudentDashboard.png
-│   ├── 🖼️ AdminDashboard.png
-│   ├── 🖼️ CompanyDashboard.png
-│   ├── 🖼️ StudentReg.png
-│   ├── 🖼️ CompanyReg.png
-│   └── 🖼️ AdminAccess.png
-├── 📂 frontend/                        # Vanilla HTML5 + CSS3 + JS Frontend
-│   ├── 📂 pages/
-│   │   ├── 📄 index.html               # Landing page
-│   │   ├── 📄 login-page.html          # Unified login (student/company/admin)
-│   │   ├── 📄 student-register.html    # Student registration form
-│   │   ├── 📄 company-register.html    # Company registration form
-│   │   ├── 📄 student-dashboard.html   # Student portal dashboard
-│   │   ├── 📄 company-dashboard.html   # Company portal dashboard
-│   │   ├── 📄 admin-dashboard.html     # Admin portal dashboard
-│   │   ├── 📄 admin-access.html        # Admin access/login page
-│   │   └── 📄 reset-password.html      # Password reset page
-│   ├── 📂 scripts/
-│   │   ├── 📄 api.js                   # Central fetch wrapper (Bearer token, 401 redirect)
-│   │   ├── 📄 auth.js                  # Login, logout, requireAuth, getUser, showToast
-│   │   ├── 📄 index.js                 # Landing page logic
-│   │   ├── 📄 admin.js                 # All admin dashboard logic
-│   │   ├── 📄 company.js               # All company dashboard logic
-│   │   └── 📄 student.js               # All student dashboard logic
-│   ├── 📂 styles/
-│   │   ├── 📄 index.css                # Landing & shared styles
-│   │   ├── 📄 student-dashboard.css    # Student portal styles
-│   │   └── 📄 company-dashboard.css    # Company portal styles
-│   └── 📄 .gitignore
-├── 📄 .gitignore
-├── 📄 .vercelignore
-├── 📄 backend.log                      # Application logs
-├── 📄 index.html                       # Root entry — redirects to frontend/pages/index.html
-├── 📄 LICENSE
-├── 📄 README.md
-├── 📄 run.sh                           # One-command local startup script
-└── 📄 vercel.json                      # Vercel deployment config
 ```
 
 ---
@@ -696,7 +696,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 **© 2026 Abhishek Giri | GEHU Placement Portal**
 
-*Built for Graphic Era Hill University, Bhimtal*
+*Built for Graphic Era Hill University, Dehradun*
 
 <img src="https://img.shields.io/badge/Made%20with-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"/>
 <img src="https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/>
