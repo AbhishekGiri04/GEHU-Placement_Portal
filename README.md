@@ -236,62 +236,96 @@ announcements   — id (PK), title, content, created_by, ...
 ```mermaid
 erDiagram
     ADMINS {
-        bigserial admin_id PK
-        varchar admin_name
-        varchar email_address UK
-        varchar password
-        timestamptz created_at
+        bigserial admin_id PK "🔑 Primary Key — Auto Increment"
+        varchar admin_name "Full name of admin"
+        varchar email_address UK "Unique login email"
+        varchar password "bcrypt hashed"
+        varchar phone "Contact number"
+        timestamptz created_at "Account creation time"
     }
+
     STUDENTS {
-        varchar student_admission_number PK
+        varchar student_admission_number PK "🔑 e.g. 2318169"
         varchar student_first_name
         varchar student_last_name
-        varchar department
-        double cgpa
-        varchar password
-        timestamptz created_at
-    }
-    COMPANIES {
-        varchar company_id PK
-        varchar company_name UK
-        varchar hr_email UK
-        varchar password
-        timestamptz created_at
-    }
-    EVENTS {
-        bigserial event_id PK
-        varchar company_id FK
-        varchar event_name
-        varchar job_role
-        double expected_cgpa
-        varchar status
-        timestamptz registration_end
-    }
-    PARTICIPATION {
-        varchar student_admission_number FK
-        bigint event_id FK
-        varchar participation_status
-        timestamptz created_at
-    }
-    MESSAGES {
-        bigserial id PK
-        varchar sender_name
-        varchar sender_email
-        text message
-        text reply
-        varchar status
-    }
-    ANNOUNCEMENTS {
-        bigserial id PK
-        varchar title
-        text content
-        varchar created_by
+        varchar department "CSE / ECE / ME etc."
+        double cgpa "0.0 – 10.0"
+        varchar email_address
+        varchar mobile_number
+        varchar address
+        int backlogs "Active backlogs count"
+        varchar resume_url "Google Drive link"
+        varchar resume_filename "Uploaded PDF name"
+        varchar password "bcrypt hashed"
         timestamptz created_at
     }
 
-    COMPANIES ||--o{ EVENTS : "creates"
-    STUDENTS ||--o{ PARTICIPATION : "applies"
-    EVENTS ||--o{ PARTICIPATION : "receives"
+    COMPANIES {
+        varchar company_id PK "🔑 e.g. TCS001"
+        varchar company_name UK "Unique company name"
+        varchar hr_email UK "Unique HR email"
+        varchar hr_name
+        varchar industry
+        varchar website
+        varchar password "bcrypt hashed"
+        timestamptz created_at
+    }
+
+    EVENTS {
+        bigserial event_id PK "🔑 Auto Increment"
+        varchar company_id FK "→ COMPANIES.company_id"
+        varchar event_name
+        varchar job_role "e.g. SDE, Analyst"
+        double package_lpa "CTC in LPA"
+        double expected_cgpa "Min CGPA required"
+        varchar allowed_departments "Comma-separated"
+        varchar job_location
+        varchar job_type "Full-Time / Intern"
+        varchar status "UPCOMING/OPEN/CLOSED/COMPLETED"
+        timestamptz registration_start
+        timestamptz registration_end
+        timestamptz event_date
+        text description
+        timestamptz created_at
+    }
+
+    PARTICIPATION {
+        varchar student_admission_number FK "→ STUDENTS (Composite PK)"
+        bigint event_id FK "→ EVENTS (Composite PK)"
+        varchar participation_status "REGISTERED/ATTEMPTED/SELECTED/REJECTED/COMPLETED"
+        text remarks
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    MESSAGES {
+        bigserial id PK "🔑 Auto Increment"
+        varchar sender_name
+        varchar sender_email
+        varchar sender_role "student / company / guest"
+        varchar subject
+        text message
+        text reply "Admin reply text"
+        varchar status "UNREAD / READ / REPLIED"
+        timestamptz created_at
+        timestamptz replied_at
+    }
+
+    ANNOUNCEMENTS {
+        bigserial id PK "🔑 Auto Increment"
+        varchar title
+        text content
+        varchar created_by "Admin name"
+        boolean is_active
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    COMPANIES ||--o{ EVENTS : "creates drives"
+    STUDENTS ||--o{ PARTICIPATION : "applies to"
+    EVENTS ||--o{ PARTICIPATION : "receives applications"
+    ADMINS ||--o{ ANNOUNCEMENTS : "publishes"
+    ADMINS ||--o{ MESSAGES : "replies to"
 ```
 
 ---
@@ -300,66 +334,91 @@ erDiagram
 
 ```
 GEHU-Placement_Portal/
-├── assets/
-│   └── images/                    # Logos, favicon, architecture diagrams
-├── backend/
-│   ├── config/
-│   │   └── database.js            # PostgreSQL pool + execute() wrapper
-│   ├── controllers/
-│   │   ├── adminController.js     # Students, companies, events, analytics, messages, announcements
-│   │   ├── authController.js      # Login, register, forgot/reset password
-│   │   ├── companyController.js   # Company profile, drives, applicants, messages
-│   │   ├── eventController.js     # Public event browsing endpoints
-│   │   ├── messageController.js   # Message CRUD
-│   │   ├── participationController.js  # Participation records
-│   │   └── studentController.js   # Profile, applications, resume, dashboard
-│   ├── middleware/
-│   │   ├── auth.js                # JWT verification
-│   │   └── roleMiddleware.js      # Role-based access guard
-│   ├── routes/
-│   │   ├── admin.js               # 22 admin routes
-│   │   ├── announcements.js       # Public GET announcements
-│   │   ├── auth.js                # 8 auth routes
-│   │   ├── companies.js           # 11 company routes
-│   │   ├── events.js              # 4 public event routes
-│   │   ├── messages.js            # 4 message routes
-│   │   └── students.js            # 9 student routes
-│   ├── uploads/
-│   │   └── resumes/               # Uploaded PDF resumes
-│   ├── utils/
-│   │   └── emailService.js        # Nodemailer with graceful fallback
-│   ├── .env                       # Environment variables (not committed)
-│   ├── database.sql               # PostgreSQL schema + sample data
-│   ├── package.json
-│   └── server.js                  # Express app entry point
-├── docs/                          # Screenshots & diagrams
-├── src/
-│   ├── pages/
-│   │   ├── admin-dashboard.html
-│   │   ├── company-dashboard.html
-│   │   ├── login-page.html
-│   │   ├── reset-password.html
-│   │   ├── student-dashboard.html
-│   │   ├── student-register.html
-│   │   ├── company-register.html
-│   │   └── index.html
-│   ├── scripts/
-│   │   ├── api.js                 # Central fetch wrapper (Bearer token, 401 redirect)
-│   │   ├── auth.js                # Login, logout, requireAuth, getUser, showToast
-│   │   ├── admin.js               # All admin dashboard logic
-│   │   ├── company.js             # All company dashboard logic
-│   │   └── student.js             # All student dashboard logic
-│   └── styles/
-│       ├── student-dashboard.css
-│       ├── company-dashboard.css
-│       └── index.css
-├── .gitignore
-├── .vercelignore
-├── index.html                     # Root entry — redirects to src/pages/index.html
-├── LICENSE
-├── README.md
-├── run.sh                         # One-command local startup script
-└── vercel.json                    # Render/Vercel deployment config
+├── 📂 assets/                          # Static assets — logos & images
+│   ├── 🖼️ accenture-logo.png
+│   ├── 🖼️ amazon-logo.png
+│   ├── 🖼️ favicon.png
+│   ├── 🖼️ google-logo.png
+│   ├── 🖼️ infosys-logo.png
+│   ├── 🖼️ main-building.png
+│   ├── 🖼️ microsoft-logo.png
+│   ├── 🖼️ navbar-logo.png
+│   ├── 🖼️ tcs-logo.png
+│   ├── 🖼️ visa-logo.png
+│   └── 🖼️ wipro-logo.png
+├── 📂 backend/                         # Node.js + Express API Server
+│   ├── 📂 config/
+│   │   └── 📄 database.js              # PostgreSQL pool + execute() wrapper
+│   ├── 📂 controllers/
+│   │   ├── 📄 adminController.js       # Students, companies, events, analytics, messages, announcements
+│   │   ├── 📄 authController.js        # Login, register, forgot/reset password
+│   │   ├── 📄 companyController.js     # Company profile, drives, applicants, messages
+│   │   ├── 📄 eventController.js       # Public event browsing endpoints
+│   │   ├── 📄 messageController.js     # Message CRUD
+│   │   └── 📄 studentController.js     # Profile, applications, resume, dashboard
+│   ├── 📂 middleware/
+│   │   ├── 📄 auth.js                  # JWT token verification
+│   │   └── 📄 roleMiddleware.js        # Role-based access guard (student/company/admin)
+│   ├── 📂 routes/
+│   │   ├── 📄 admin.js                 # Admin routes
+│   │   ├── 📄 announcements.js         # Public GET announcements
+│   │   ├── 📄 auth.js                  # Auth routes (login, register, reset)
+│   │   ├── 📄 companies.js             # Company routes
+│   │   ├── 📄 events.js                # Public event routes
+│   │   ├── 📄 messages.js              # Message routes
+│   │   └── 📄 students.js              # Student routes
+│   ├── 📂 uploads/
+│   │   └── 📂 resumes/                 # Uploaded PDF resumes (gitkeep)
+│   ├── 📂 utils/
+│   │   └── 📄 emailService.js          # Nodemailer with graceful fallback
+│   ├── 📄 .env.example                 # Environment variables template
+│   ├── 📄 .gitignore
+│   ├── 📄 database.sql                 # PostgreSQL schema + sample data
+│   ├── 📄 package.json
+│   ├── 📄 package-lock.json
+│   └── 📄 server.js                    # Express app entry point
+├── 📂 docs/                            # Screenshots & diagrams
+│   ├── 🖼️ GEHU.png                     # Project banner
+│   ├── 🖼️ SystemDesign.png             # System architecture diagram
+│   ├── 🖼️ LandingPage.png
+│   ├── 🖼️ LoginPage.png
+│   ├── 🖼️ StudentDashboard.png
+│   ├── 🖼️ AdminDashboard.png
+│   ├── 🖼️ CompanyDashboard.png
+│   ├── 🖼️ StudentReg.png
+│   ├── 🖼️ CompanyReg.png
+│   └── 🖼️ AdminAccess.png
+├── 📂 frontend/                        # Vanilla HTML5 + CSS3 + JS Frontend
+│   ├── 📂 pages/
+│   │   ├── 📄 index.html               # Landing page
+│   │   ├── 📄 login-page.html          # Unified login (student/company/admin)
+│   │   ├── 📄 student-register.html    # Student registration form
+│   │   ├── 📄 company-register.html    # Company registration form
+│   │   ├── 📄 student-dashboard.html   # Student portal dashboard
+│   │   ├── 📄 company-dashboard.html   # Company portal dashboard
+│   │   ├── 📄 admin-dashboard.html     # Admin portal dashboard
+│   │   ├── 📄 admin-access.html        # Admin access/login page
+│   │   └── 📄 reset-password.html      # Password reset page
+│   ├── 📂 scripts/
+│   │   ├── 📄 api.js                   # Central fetch wrapper (Bearer token, 401 redirect)
+│   │   ├── 📄 auth.js                  # Login, logout, requireAuth, getUser, showToast
+│   │   ├── 📄 index.js                 # Landing page logic
+│   │   ├── 📄 admin.js                 # All admin dashboard logic
+│   │   ├── 📄 company.js               # All company dashboard logic
+│   │   └── 📄 student.js               # All student dashboard logic
+│   ├── 📂 styles/
+│   │   ├── 📄 index.css                # Landing & shared styles
+│   │   ├── 📄 student-dashboard.css    # Student portal styles
+│   │   └── 📄 company-dashboard.css    # Company portal styles
+│   └── 📄 .gitignore
+├── 📄 .gitignore
+├── 📄 .vercelignore
+├── 📄 backend.log                      # Application logs
+├── 📄 index.html                       # Root entry — redirects to frontend/pages/index.html
+├── 📄 LICENSE
+├── 📄 README.md
+├── 📄 run.sh                           # One-command local startup script
+└── 📄 vercel.json                      # Vercel deployment config
 ```
 
 ---
@@ -460,7 +519,7 @@ GEHU-Placement_Portal/
 ### Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/AbhishekGiri04/GEHU-Smart_Placement_Portal.git
+git clone https://github.com/AbhishekGiri04/GEHU-Placement_Portal.git
 cd GEHU-Placement_Portal
 ```
 
@@ -583,32 +642,64 @@ bash run.sh
 
 ---
 
-## 📄 License
+---
 
-MIT License — see [LICENSE](LICENSE) for details.
+## 📞 Contact & Support
+
+<div align="center">
+
+> 💬 *Got questions or need assistance with GEHU Placement Portal?*
+> We're here to help with technical support, deployment guidance, and collaboration opportunities!
+
+<br/>
+
+**👤 Abhishek Giri** — Developer & Project Lead
+
+<a href="https://linkedin.com/in/abhishek-giri04">
+  <img src="https://img.shields.io/badge/Connect%20on-LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+</a>
+&nbsp;
+<a href="https://github.com/AbhishekGiri04">
+  <img src="https://img.shields.io/badge/Follow%20on-GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
+</a>
+&nbsp;
+<a href="https://t.me/AbhishekGiri7">
+  <img src="https://img.shields.io/badge/Chat%20on-Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="Telegram"/>
+</a>
+&nbsp;
+<a href="mailto:abhishekgiri.dev@gmail.com">
+  <img src="https://img.shields.io/badge/Email-Contact-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/>
+</a>
+
+</div>
 
 ---
 
 <div align="center">
 
-**👤 Developer**
+## 📄 License
 
-<a href="https://www.linkedin.com/in/abhishek-giri04/">
-  <img src="https://img.shields.io/badge/LinkedIn-Abhishek_Giri-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
-</a>
-&nbsp;
-<a href="https://github.com/AbhishekGiri04">
-  <img src="https://img.shields.io/badge/GitHub-AbhishekGiri04-100000?style=for-the-badge&logo=github&logoColor=white"/>
-</a>
-&nbsp;
-<a href="mailto:abhishekgiri1978@gmail.com">
-  <img src="https://img.shields.io/badge/Email-abhishekgiri1978@gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white"/>
-</a>
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
-<br><br>
+---
 
-**🎓 Built for Graphic Era Hill University**
+**🚀 Built with ❤️ for Campus Placement Excellence**
 
-*© 2026 GEHU Placement Portal. All Rights Reserved.*
+*Transforming Campus Recruitment Through Centralized Digital Automation*
+
+<p style="font-size: 1.1em; color: #1e40af; margin: 20px 0;">
+<b>GEHU Placement Portal</b> — Campus Placement Management System<br/>
+<em>Empowering students, companies, and administrators with intelligent placement automation</em>
+</p>
+
+---
+
+**© 2026 Abhishek Giri | GEHU Placement Portal**
+
+*Built for Graphic Era Hill University, Bhimtal*
+
+<img src="https://img.shields.io/badge/Made%20with-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"/>
+<img src="https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/>
+<img src="https://img.shields.io/badge/Deployed%20on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white"/>
 
 </div>
