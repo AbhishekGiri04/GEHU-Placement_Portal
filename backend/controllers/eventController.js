@@ -44,15 +44,15 @@ const getUpcomingEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
   try {
-    const [[event]] = await db.execute(`
+    const [eventRows] = await db.execute(`
       SELECT e.*, c.company_name, c.hr_name, c.hr_email
       FROM events e
       JOIN companies c ON e.company_id = c.company_id
       WHERE e.event_id = ?
     `, [req.params.id]);
 
-    if (!event) return res.status(404).json({ success: false, message: 'Event not found' });
-    res.json({ success: true, event });
+    if (!eventRows.length) return res.status(404).json({ success: false, message: 'Event not found' });
+    res.json({ success: true, event: eventRows[0] });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

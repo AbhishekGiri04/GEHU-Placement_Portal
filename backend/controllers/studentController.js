@@ -199,13 +199,14 @@ const withdrawApplication = async (req, res) => {
 // ─── DASHBOARD ────────────────────────────────────────────────────────────────
 const getDashboard = async (req, res) => {
   try {
-    const [[stats]] = await db.execute(`
+    const [statsRows] = await db.execute(`
       SELECT
         (SELECT COUNT(*) FROM participation WHERE student_admission_number=?) AS total_applied,
         (SELECT COUNT(*) FROM participation WHERE student_admission_number=? AND participation_status='SELECTED') AS selected,
         (SELECT COUNT(*) FROM participation WHERE student_admission_number=? AND participation_status='REGISTERED') AS pending,
         (SELECT COUNT(*) FROM events WHERE status='UPCOMING' AND registration_end > NOW()) AS available_drives
     `, [req.user.id, req.user.id, req.user.id]);
+    const stats = statsRows[0];
 
     const [recentApplications] = await db.execute(`
       SELECT p.participation_status, p.created_at,

@@ -17,53 +17,32 @@ logs/
 backend.log
 frontend.log
 
-# ─── Runtime / Process ───────────────────────────────────────
+# ─── Runtime ─────────────────────────────────────────────────
 pids/
 *.pid
-*.seed
 *.pid.lock
 
-# ─── Uploaded Files (keep folder structure via .gitkeep) ─────
+# ─── Uploaded Resumes (keep folder via .gitkeep) ─────────────
 backend/uploads/resumes/*.pdf
 backend/uploads/resumes/*.doc
 backend/uploads/resumes/*.docx
 
-# ─── Database ────────────────────────────────────────────────
-*.sqlite
-*.db
-
-# ─── OS Generated ────────────────────────────────────────────
+# ─── OS ──────────────────────────────────────────────────────
 .DS_Store
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
-ehthumbs.db
 Thumbs.db
 
-# ─── IDE / Editor ────────────────────────────────────────────
+# ─── IDE ─────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# ─── Build Outputs ───────────────────────────────────────────
-build/
-dist/
-out/
-.cache/
-.parcel-cache/
-
-# ─── Coverage ────────────────────────────────────────────────
-coverage/
-*.lcov
-.nyc_output/
-
 # ─── Misc ────────────────────────────────────────────────────
-*.tgz
-.npm
-.eslintcache
-.yarn-integrity
 tmp/
 temp/
+.cache/

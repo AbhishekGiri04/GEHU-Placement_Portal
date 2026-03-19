@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 // ─── DASHBOARD ────────────────────────────────────────────────────────────────
 const getDashboardStats = async (req, res) => {
   try {
-    const [[stats]] = await db.execute(`
+    const [statsRows] = await db.execute(`
       SELECT
         (SELECT COUNT(*) FROM students) AS total_students,
         (SELECT COUNT(*) FROM companies) AS total_companies,
@@ -14,6 +14,7 @@ const getDashboardStats = async (req, res) => {
         (SELECT COUNT(*) FROM participation WHERE participation_status = 'SELECTED') AS total_selected,
         (SELECT COUNT(*) FROM messages WHERE status = 'new') AS unread_messages
     `);
+    const stats = statsRows[0];
 
     const [recentApplications] = await db.execute(`
       SELECT p.participation_status, p.created_at,
@@ -60,7 +61,8 @@ const getAllStudents = async (req, res) => {
       params.push(`%${search}%`, `%${search}%`, `%${search}%`);
     }
 
-    const [[{ total }]] = await db.execute(`SELECT COUNT(*) AS total FROM students ${where}`, params);
+    const [stTotal] = await db.execute(`SELECT COUNT(*) AS total FROM students ${where}`, params);
+    const total_st = stTotal[0].total;
     const [students] = await db.execute(
       `SELECT student_admission_number, student_first_name, student_last_name,
               email_id, college_email_id, mobile_no, department, batch, cgpa,
@@ -69,7 +71,7 @@ const getAllStudents = async (req, res) => {
       [...params, parseInt(limit), offset]
     );
 
-    res.json({ success: true, students, total, page: parseInt(page), limit: parseInt(limit) });
+    res.json({ success: true, students, total: total_st, page: parseInt(page), limit: parseInt(limit) });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -145,14 +147,15 @@ const getAllCompanies = async (req, res) => {
       params.push(`%${search}%`, `%${search}%`, `%${search}%`);
     }
 
-    const [[{ total }]] = await db.execute(`SELECT COUNT(*) AS total FROM companies ${where}`, params);
+    const [cTotal] = await db.execute(`SELECT COUNT(*) AS total FROM companies ${where}`, params);
+    const total_c = cTotal[0].total;
     const [companies] = await db.execute(
       `SELECT company_id, company_name, hr_name, hr_email, hr_phone, created_at
        FROM companies ${where} ORDER BY company_name ASC LIMIT ? OFFSET ?`,
       [...params, parseInt(limit), offset]
     );
 
-    res.json({ success: true, companies, total, page: parseInt(page), limit: parseInt(limit) });
+    res.json({ success: true, companies, total: total_c, page: parseInt(page), limit: parseInt(limit) });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -211,10 +214,11 @@ const getAllEvents = async (req, res) => {
       params.push(`%${search}%`, `%${search}%`, `%${search}%`);
     }
 
-    const [[{ total }]] = await db.execute(
+    const [eTotal] = await db.execute(
       `SELECT COUNT(*) AS total FROM events e JOIN companies c ON e.company_id = c.company_id ${where}`,
       params
     );
+    const total_e = eTotal[0].total;
 
     const [events] = await db.execute(`
       SELECT e.*, c.company_name,
@@ -224,7 +228,7 @@ const getAllEvents = async (req, res) => {
       ${where} ORDER BY e.created_at DESC LIMIT ? OFFSET ?
     `, [...params, parseInt(limit), offset]);
 
-    res.json({ success: true, events, total, page: parseInt(page), limit: parseInt(limit) });
+    res.json({ success: true, events, total: total_e, page: parseInt(page), limit: parseInt(limit) });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -245,11 +249,11 @@ const createEvent = async (req, res) => {
       d.expectedPackage, d.eventDescription, d.eligibleDepartments,
       d.status || 'UPCOMING'
     ]);
-    const [[newEvent]] = await db.execute(
+    const [newEvRows] = await db.execute(
       'SELECT e.*, c.company_name FROM events e JOIN companies c ON e.company_id = c.company_id WHERE e.event_id = ?',
       [result.insertId]
     );
-    res.status(201).json({ success: true, event: newEvent });
+    res.status(201).json({ success: true, event: newEvRows[0] });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -333,13 +337,14 @@ const getMessages = async (req, res) => {
 
     if (status) { where += ' AND status = ?'; params.push(status); }
 
-    const [[{ total }]] = await db.execute(`SELECT COUNT(*) AS total FROM messages ${where}`, params);
+    const [mTotal] = await db.execute(`SELECT COUNT(*) AS total FROM messages ${where}`, params);
+    const total_m = mTotal[0].total;
     const [messages] = await db.execute(
       `SELECT * FROM messages ${where} ORDER BY created_at DESC LIMIT ? OFFSET ?`,
       [...params, parseInt(limit), offset]
     );
 
-    res.json({ success: true, messages, total, page: parseInt(page), limit: parseInt(limit) });
+    res.json({ success: true, messages, total: total_m, page: parseInt(page), limit: parseInt(limit) });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -396,8 +401,8 @@ const createAnnouncement = async (req, res) => {
       'INSERT INTO announcements (title, content, created_by) VALUES (?,?,?) RETURNING id',
       [title, content, req.user.name]
     );
-    const [[ann]] = await db.execute('SELECT * FROM announcements WHERE id = ?', [result.insertId]);
-    res.status(201).json({ success: true, announcement: ann });
+    const [annRows] = await db.execute('SELECT * FROM announcements WHERE id = ?', [result.insertId]);
+    res.status(201).json({ success: true, announcement: annRows[0] });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -428,12 +433,12 @@ const deleteAnnouncement = async (req, res) => {
 // ─── ADMIN PROFILE ────────────────────────────────────────────────────────────
 const getProfile = async (req, res) => {
   try {
-    const [[admin]] = await db.execute(
+    const [adminRows] = await db.execute(
       'SELECT admin_id, admin_name, email_address, phone_number, city, department FROM admins WHERE admin_id = ?',
       [req.user.id]
     );
-    if (!admin) return res.status(404).json({ success: false, message: 'Admin not found' });
-    res.json({ success: true, admin });
+    if (!adminRows.length) return res.status(404).json({ success: false, message: 'Admin not found' });
+    res.json({ success: true, admin: adminRows[0] });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -455,8 +460,9 @@ const updateProfile = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
-    const [[row]] = await db.execute('SELECT password FROM admins WHERE admin_id = ?', [req.user.id]);
-    if (!row) return res.status(404).json({ success: false, message: 'Admin not found' });
+    const [adminPwRows] = await db.execute('SELECT password FROM admins WHERE admin_id = ?', [req.user.id]);
+    if (!adminPwRows.length) return res.status(404).json({ success: false, message: 'Admin not found' });
+    const row = adminPwRows[0];
 
     const match = await bcrypt.compare(currentPassword, row.password);
     if (!match) return res.status(401).json({ success: false, message: 'Current password is incorrect' });

@@ -118,7 +118,7 @@
     /* Hero Section */
     .hero {
       height: 100vh; 
-      background: linear-gradient(rgba(3,34,65,0.8), rgba(3,34,65,0.7)), url('../../assets/main-building.jpg') center/cover no-repeat;
+      background: linear-gradient(rgba(3,34,65,0.8), rgba(3,34,65,0.7)), url('../../assets/main-building.png') center/cover no-repeat;
       display: flex; 
       justify-content: center; 
       align-items: center; 

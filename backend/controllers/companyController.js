@@ -4,11 +4,12 @@ const bcrypt = require('bcryptjs');
 // ─── PROFILE ──────────────────────────────────────────────────────────────────
 const getProfile = async (req, res) => {
   try {
-    const [[company]] = await db.execute(
+    const [rows] = await db.execute(
       'SELECT company_id, company_name, hr_name, hr_email, hr_phone, photo_link, created_at FROM companies WHERE company_id = ?',
       [req.user.id]
     );
-    if (!company) return res.status(404).json({ success: false, message: 'Company not found' });
+    if (!rows.length) return res.status(404).json({ success: false, message: 'Company not found' });
+    const company = rows[0];
     res.json({ success: true, company });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -31,8 +32,9 @@ const updateProfile = async (req, res) => {
 const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
-    const [[row]] = await db.execute('SELECT password FROM companies WHERE company_id = ?', [req.user.id]);
-    if (!row) return res.status(404).json({ success: false, message: 'Company not found' });
+    const [pwRows] = await db.execute('SELECT password FROM companies WHERE company_id = ?', [req.user.id]);
+    if (!pwRows.length) return res.status(404).json({ success: false, message: 'Company not found' });
+    const row = pwRows[0];
 
     const match = await bcrypt.compare(currentPassword, row.password);
     if (!match) return res.status(401).json({ success: false, message: 'Current password is incorrect' });
@@ -48,13 +50,14 @@ const changePassword = async (req, res) => {
 // ─── DASHBOARD ────────────────────────────────────────────────────────────────
 const getDashboard = async (req, res) => {
   try {
-    const [[stats]] = await db.execute(`
+    const [statsRows] = await db.execute(`
       SELECT
         (SELECT COUNT(*) FROM events WHERE company_id = ?) AS total_drives,
         (SELECT COUNT(*) FROM events WHERE company_id = ? AND status = 'UPCOMING') AS upcoming_drives,
         (SELECT COUNT(*) FROM participation p JOIN events e ON p.event_id = e.event_id WHERE e.company_id = ?) AS total_applicants,
         (SELECT COUNT(*) FROM participation p JOIN events e ON p.event_id = e.event_id WHERE e.company_id = ? AND p.participation_status = 'SELECTED') AS selected_count
     `, [req.user.id, req.user.id, req.user.id, req.user.id]);
+    const stats = statsRows[0];
 
     const [recentApplicants] = await db.execute(`
       SELECT p.participation_status, p.created_at,
@@ -104,8 +107,8 @@ const createEvent = async (req, res) => {
       d.expectedPackage, d.eventDescription, d.eligibleDepartments,
       d.status || 'UPCOMING'
     ]);
-    const [[newEvent]] = await db.execute('SELECT * FROM events WHERE event_id = ?', [result.insertId]);
-    res.status(201).json({ success: true, event: newEvent });
+    const [newEventRows] = await db.execute('SELECT * FROM events WHERE event_id = ?', [result.insertId]);
+    res.status(201).json({ success: true, event: newEventRows[0] });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -116,11 +119,11 @@ const updateEvent = async (req, res) => {
     const { id } = req.params;
     const d = req.body;
 
-    const [[existing]] = await db.execute(
+    const [existingRows] = await db.execute(
       'SELECT event_id FROM events WHERE event_id = ? AND company_id = ?',
       [id, req.user.id]
     );
-    if (!existing) return res.status(404).json({ success: false, message: 'Event not found or unauthorized' });
+    if (!existingRows.length) return res.status(404).json({ success: false, message: 'Event not found or unauthorized' });
 
     await db.execute(`
       UPDATE events SET
@@ -142,11 +145,11 @@ const updateEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
-    const [[existing]] = await db.execute(
+    const [delRows] = await db.execute(
       'SELECT event_id FROM events WHERE event_id = ? AND company_id = ?',
       [id, req.user.id]
     );
-    if (!existing) return res.status(404).json({ success: false, message: 'Event not found or unauthorized' });
+    if (!delRows.length) return res.status(404).json({ success: false, message: 'Event not found or unauthorized' });
 
     await db.execute('DELETE FROM events WHERE event_id = ?', [id]);
     res.json({ success: true, message: 'Event deleted successfully' });
@@ -159,11 +162,11 @@ const deleteEvent = async (req, res) => {
 const getEventApplicants = async (req, res) => {
   try {
     const { eventId } = req.params;
-    const [[event]] = await db.execute(
+    const [eventAuthRows] = await db.execute(
       'SELECT event_id FROM events WHERE event_id = ? AND company_id = ?',
       [eventId, req.user.id]
     );
-    if (!event) return res.status(403).json({ success: false, message: 'Unauthorized' });
+    if (!eventAuthRows.length) return res.status(403).json({ success: false, message: 'Unauthorized' });
 
     const [applicants] = await db.execute(`
       SELECT
@@ -239,9 +242,10 @@ const getAllApplicants = async (req, res) => {
 const sendMessage = async (req, res) => {
   try {
     const { subject, message } = req.body;
-    const [[company]] = await db.execute(
+    const [compRows] = await db.execute(
       'SELECT company_name, hr_email FROM companies WHERE company_id = ?', [req.user.id]
     );
+    const company = compRows[0];
     await db.execute(
       "INSERT INTO messages (sender_name, sender_email, sender_role, subject, message) VALUES (?,?,?,?,?)",
       [company.company_name, company.hr_email, 'company', subject, message]

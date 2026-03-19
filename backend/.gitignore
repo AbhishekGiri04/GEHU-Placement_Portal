@@ -1,24 +1,24 @@
-# Dependencies
+# ─── Dependencies ────────────────────────────────────────────
 node_modules/
 
-# Environment — NEVER commit real credentials
+# ─── Environment — NEVER commit real credentials ─────────────
 .env
 .env.local
 .env.*.local
 
-# Uploaded files
+# ─── Uploaded Files (keep folder via .gitkeep) ───────────────
 uploads/resumes/*.pdf
 uploads/resumes/*.doc
 uploads/resumes/*.docx
 
-# Logs
+# ─── Logs ────────────────────────────────────────────────────
 *.log
 logs/
 
-# OS
+# ─── OS ──────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
 
-# IDE
+# ─── IDE ─────────────────────────────────────────────────────
 .vscode/
 .idea/

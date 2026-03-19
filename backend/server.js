@@ -7,7 +7,7 @@ const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 
 // ─── ENSURE UPLOADS DIR EXISTS ────────────────────────────────────────────────
 const uploadsDir = path.join(__dirname, 'uploads/resumes');
@@ -63,7 +63,6 @@ app.use('/api/', apiLimiter);
 // ─── STATIC FILES ─────────────────────────────────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
-app.use('/src', express.static(path.join(__dirname, '../src')));
 app.use(express.static(path.join(__dirname, '..')));
 
 // ─── API ROUTES ───────────────────────────────────────────────────────────────

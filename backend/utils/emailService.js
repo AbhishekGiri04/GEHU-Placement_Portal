@@ -41,26 +41,4 @@ const sendPasswordResetEmail = async (toEmail, resetToken, role) => {
   });
 };
 
-const sendNotificationEmail = async (toEmail, subject, message) => {
-  const transporter = getTransporter();
-  if (!transporter) {
-    console.warn('[Email] Not configured — skipping notification email to:', toEmail);
-    return;
-  }
-
-  await transporter.sendMail({
-    from: `"GEHU Placement Portal" <${process.env.EMAIL_USER}>`,
-    to: toEmail,
-    subject,
-    html: `
-      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
-        <h2 style="color:#032241;">${subject}</h2>
-        <p>${message}</p>
-        <hr style="border:none;border-top:1px solid #eee;margin:20px 0;">
-        <p style="color:#999;font-size:12px;">GEHU Placement Portal | Graphic Era Hill University</p>
-      </div>
-    `
-  });
-};
-
-module.exports = { sendPasswordResetEmail, sendNotificationEmail };
+module.exports = { sendPasswordResetEmail };
