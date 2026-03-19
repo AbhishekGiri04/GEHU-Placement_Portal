@@ -1,30 +1,55 @@
 const express = require('express');
 const router = express.Router();
-const studentController = require('../controllers/studentController');
-const auth = require('../middleware/auth');
 const multer = require('multer');
+const path = require('path');
+const auth = require('../middleware/auth');
+const role = require('../middleware/roleMiddleware');
+const c = require('../controllers/studentController');
 
-// Configure multer for resume uploads
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/resumes/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${req.user.id}_${Date.now()}_${file.originalname}`);
-  }
+  destination: (req, file, cb) => cb(null, path.join(__dirname, '../uploads/resumes')),
+  // Sanitize filename: only admission number + timestamp, force .pdf extension
+  filename: (req, file, cb) => cb(null, `${req.user.id}_${Date.now()}.pdf`)
 });
-const upload = multer({ storage });
 
-// Student profile routes
-router.get('/profile', auth, studentController.getProfile);
-router.put('/profile', auth, studentController.updateProfile);
-router.post('/resume', auth, upload.single('resume'), studentController.uploadResume);
+const fileFilter = (req, file, cb) => {
+  const allowedMime = 'application/pdf';
+  const allowedExt = '.pdf';
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (file.mimetype === allowedMime && ext === allowedExt) {
+    cb(null, true);
+  } else {
+    cb(new Error('Only PDF files are allowed'), false);
+  }
+};
 
-// Application routes
-router.get('/applications', auth, studentController.getApplications);
-router.post('/apply/:eventId', auth, studentController.applyToEvent);
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter
+});
 
-// Dashboard data
-router.get('/dashboard', auth, studentController.getDashboardData);
+// Multer error handler for this route
+const handleUpload = (req, res, next) => {
+  upload.single('resume')(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ success: false, message: err.code === 'LIMIT_FILE_SIZE' ? 'File size must be under 5MB' : err.message });
+    }
+    if (err) {
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    next();
+  });
+};
+
+router.get('/dashboard', auth, role('student'), c.getDashboard);
+router.get('/profile', auth, role('student'), c.getProfile);
+router.put('/profile', auth, role('student'), c.updateProfile);
+router.put('/change-password', auth, role('student'), c.changePassword);
+router.post('/resume/upload', auth, role('student'), handleUpload, c.uploadResume);
+router.put('/resume/link', auth, role('student'), c.updateResumeLink);
+router.get('/applications', auth, role('student'), c.getApplications);
+router.post('/apply/:eventId', auth, role('student'), c.applyToEvent);
+router.delete('/withdraw/:eventId', auth, role('student'), c.withdrawApplication);
 
 module.exports = router;

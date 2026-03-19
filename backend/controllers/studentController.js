@@ -1,237 +1,243 @@
 const db = require('../config/database');
+const bcrypt = require('bcryptjs');
+const path = require('path');
+const fs = require('fs');
 
-const getAllStudents = async (req, res) => {
+// ─── PROFILE ──────────────────────────────────────────────────────────────────
+const getProfile = async (req, res) => {
   try {
-    const [students] = await db.execute('SELECT * FROM students ORDER BY student_first_name ASC');
-    res.json(students);
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error', error: error.message });
-  }
-};
-
-const getStudent = async (req, res) => {
-  try {
-    const { admissionNumber } = req.params;
-    const [student] = await db.execute(
-      'SELECT * FROM students WHERE student_admission_number = ?', 
-      [admissionNumber]
+    const [rows] = await db.execute(
+      'SELECT * FROM students WHERE student_admission_number = ?', [req.user.id]
     );
-
-    if (!student.length) {
-      return res.status(404).json({ success: false, message: 'Student not found with admission number: ' + admissionNumber });
-    }
-
-    res.json(student[0]);
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error', error: error.message });
-  }
-};
-
-const updateStudent = async (req, res) => {
-  try {
-    const { admissionNumber } = req.params;
-    const studentData = req.body;
-
-    const [existing] = await db.execute(
-      'SELECT student_admission_number FROM students WHERE student_admission_number = ?',
-      [admissionNumber]
-    );
-
-    if (!existing.length) {
+    if (!rows.length)
       return res.status(404).json({ success: false, message: 'Student not found' });
-    }
 
+    const s = rows[0];
+    delete s.password;
+    delete s.reset_token;
+    delete s.reset_token_expires;
+    res.json({ success: true, student: s });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+const updateProfile = async (req, res) => {
+  try {
+    const d = req.body;
     await db.execute(`
-      UPDATE students SET 
-        student_first_name = ?, student_last_name = ?, father_name = ?, mother_name = ?,
-        date_of_birth = ?, gender = ?, mobile_no = ?, email_id = ?, college_email_id = ?,
-        department = ?, batch = ?, cgpa = ?, tenth_percentage = ?, twelfth_percentage = ?,
-        back_logs_count = ?, address = ?, resume_link = ?, photograph_link = ?,
-        course = ?, student_university_roll_no = ?, student_enrollment_no = ?
-      WHERE student_admission_number = ?
-    `, [
-      studentData.studentFirstName, studentData.studentLastName, studentData.fatherName, studentData.motherName,
-      studentData.dateOfBirth, studentData.gender, studentData.mobileNo, studentData.emailId, studentData.collegeEmailId,
-      studentData.department, studentData.batch, studentData.cgpa, studentData.tenthPercentage, studentData.twelfthPercentage,
-      studentData.backLogsCount, studentData.address, studentData.resumeLink, studentData.photographLink,
-      studentData.course, studentData.studentUniversityRollNo, studentData.studentEnrollmentNo, admissionNumber
-    ]);
-
-    const [updatedStudent] = await db.execute(
-      'SELECT * FROM students WHERE student_admission_number = ?',
-      [admissionNumber]
-    );
-
-    res.json(updatedStudent[0]);
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+      UPDATE students SET
+        mobile_no=?, email_id=?, address=?, back_logs_count=?
+      WHERE student_admission_number=?
+    `, [d.mobileNo, d.emailId, d.address || null, d.backLogsCount || 0, req.user.id]);
+    res.json({ success: true, message: 'Profile updated successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-const deleteStudent = async (req, res) => {
+const changePassword = async (req, res) => {
   try {
-    const { admissionNumber } = req.params;
-
-    const [existing] = await db.execute(
-      'SELECT student_admission_number FROM students WHERE student_admission_number = ?',
-      [admissionNumber]
+    const { currentPassword, newPassword } = req.body;
+    const [rows] = await db.execute(
+      'SELECT password FROM students WHERE student_admission_number = ?', [req.user.id]
     );
-
-    if (!existing.length) {
+    if (!rows.length)
       return res.status(404).json({ success: false, message: 'Student not found' });
-    }
 
-    await db.execute('DELETE FROM students WHERE student_admission_number = ?', [admissionNumber]);
-    res.json({ success: true, message: 'Student deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    const match = await bcrypt.compare(currentPassword, rows[0].password);
+    if (!match)
+      return res.status(401).json({ success: false, message: 'Current password is incorrect' });
+
+    const hashed = await bcrypt.hash(newPassword, 10);
+    await db.execute(
+      'UPDATE students SET password=? WHERE student_admission_number=?', [hashed, req.user.id]
+    );
+    res.json({ success: true, message: 'Password changed successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
+// ─── RESUME ───────────────────────────────────────────────────────────────────
 const uploadResume = async (req, res) => {
   try {
-    const { admissionNumber } = req.params;
-    const file = req.file;
+    if (!req.file)
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
 
-    if (!file) {
-      return res.status(400).json({ success: false, message: 'Please select a file to upload' });
+    const allowedTypes = ['application/pdf'];
+    if (!allowedTypes.includes(req.file.mimetype)) {
+      fs.unlinkSync(req.file.path);
+      return res.status(400).json({ success: false, message: 'Only PDF files are allowed' });
     }
 
-    // Validate file type
-    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-    if (!allowedTypes.includes(file.mimetype)) {
-      return res.status(400).json({ success: false, message: 'Please upload a PDF or Word document' });
+    if (req.file.size > 5 * 1024 * 1024) {
+      fs.unlinkSync(req.file.path);
+      return res.status(400).json({ success: false, message: 'File size must be under 5MB' });
     }
 
-    // Validate file size (5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      return res.status(400).json({ success: false, message: 'File size should be less than 5MB' });
-    }
-
-    const resumeLink = `/uploads/resumes/${admissionNumber}_${file.originalname}`;
-
+    const resumeLink = `/uploads/resumes/${req.file.filename}`;
     await db.execute(
-      'UPDATE students SET resume_link = ? WHERE student_admission_number = ?',
-      [resumeLink, admissionNumber]
+      'UPDATE students SET resume_link=? WHERE student_admission_number=?',
+      [resumeLink, req.user.id]
     );
 
-    res.json({
-      success: true,
-      message: 'Resume uploaded successfully',
-      resumeLink: resumeLink
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to upload resume: ' + error.message });
+    res.json({ success: true, message: 'Resume uploaded successfully', resumeLink });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-const updateResumeDriveLink = async (req, res) => {
+const updateResumeLink = async (req, res) => {
   try {
-    const { admissionNumber } = req.params;
     const { driveLink } = req.body;
+    if (!driveLink || !driveLink.startsWith('https://'))
+      return res.status(400).json({ success: false, message: 'Please provide a valid HTTPS link' });
 
-    if (!driveLink || driveLink.trim() === '') {
-      return res.status(400).json({ success: false, message: 'Drive link is required' });
-    }
-
-    // Validate Google Drive link
-    const isValidDriveLink = (link) => {
-      return link.includes('drive.google.com') || link.includes('docs.google.com') || link.startsWith('https://');
-    };
-
-    if (!isValidDriveLink(driveLink)) {
-      return res.status(400).json({ success: false, message: 'Please provide a valid Google Drive shareable link' });
-    }
-
-    const [student] = await db.execute(
-      'SELECT student_admission_number FROM students WHERE student_admission_number = ?',
-      [admissionNumber]
+    await db.execute(
+      'UPDATE students SET resume_link=? WHERE student_admission_number=?',
+      [driveLink, req.user.id]
     );
+    res.json({ success: true, message: 'Resume link updated', resumeLink: driveLink });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
 
-    if (!student.length) {
+// ─── APPLICATIONS ─────────────────────────────────────────────────────────────
+const getApplications = async (req, res) => {
+  try {
+    const [applications] = await db.execute(`
+      SELECT
+        p.participation_status, p.created_at, p.event_description AS remarks,
+        e.event_id, e.event_name, e.job_role,
+        e.expected_package, e.event_mode, e.status AS event_status,
+        c.company_name AS organizing_company
+      FROM participation p
+      JOIN events e ON p.event_id = e.event_id
+      JOIN companies c ON e.company_id = c.company_id
+      WHERE p.student_admission_number = ?
+      ORDER BY p.created_at DESC
+    `, [req.user.id]);
+
+    res.json({ success: true, applications });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+const applyToEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const [existing] = await db.execute(
+      'SELECT * FROM participation WHERE student_admission_number=? AND event_id=?',
+      [req.user.id, eventId]
+    );
+    if (existing.length)
+      return res.status(400).json({ success: false, message: 'Already applied to this drive' });
+
+    const [event] = await db.execute(
+      `SELECT * FROM events WHERE event_id=? AND status IN ('UPCOMING','ONGOING') AND registration_end > NOW()`,
+      [eventId]
+    );
+    if (!event.length)
+      return res.status(400).json({ success: false, message: 'Drive is not open for registration' });
+
+    const e = event[0];
+
+    // Eligibility check
+    const [student] = await db.execute(
+      'SELECT cgpa, department FROM students WHERE student_admission_number=?', [req.user.id]
+    );
+    if (!student.length)
       return res.status(404).json({ success: false, message: 'Student not found' });
+
+    if (e.expected_cgpa && student[0].cgpa < e.expected_cgpa)
+      return res.status(400).json({ success: false, message: `Minimum CGPA required: ${e.expected_cgpa}` });
+
+    if (e.eligible_departments) {
+      const depts = e.eligible_departments.split(',').map(d => d.trim());
+      if (!depts.includes(student[0].department))
+        return res.status(400).json({ success: false, message: 'Your department is not eligible for this drive' });
     }
 
     await db.execute(
-      'UPDATE students SET resume_link = ? WHERE student_admission_number = ?',
-      [driveLink, admissionNumber]
+      `INSERT INTO participation (student_admission_number, event_id, participation_status) VALUES (?,?,'REGISTERED')`,
+      [req.user.id, eventId]
     );
 
-    res.json({
-      success: true,
-      message: 'Resume drive link updated successfully',
-      resumeLink: driveLink
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to update resume link: ' + error.message });
+    res.json({ success: true, message: 'Successfully applied to the drive' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-const getResumeDriveLink = async (req, res) => {
+const withdrawApplication = async (req, res) => {
   try {
-    const { admissionNumber } = req.params;
-
-    const [student] = await db.execute(
-      'SELECT resume_link FROM students WHERE student_admission_number = ?',
-      [admissionNumber]
+    const { eventId } = req.params;
+    const [existing] = await db.execute(
+      'SELECT * FROM participation WHERE student_admission_number=? AND event_id=?',
+      [req.user.id, eventId]
     );
+    if (!existing.length)
+      return res.status(404).json({ success: false, message: 'Application not found' });
 
-    if (!student.length) {
-      return res.status(404).json({ success: false, message: 'Student not found' });
-    }
+    if (['SELECTED', 'COMPLETED'].includes(existing[0].participation_status))
+      return res.status(400).json({ success: false, message: 'Cannot withdraw at this stage' });
 
-    const resumeLink = student[0].resume_link;
-
-    res.json({
-      success: true,
-      resumeLink: resumeLink || '',
-      hasResume: resumeLink && resumeLink.trim() !== ''
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Failed to get resume link: ' + error.message });
+    await db.execute(
+      'DELETE FROM participation WHERE student_admission_number=? AND event_id=?',
+      [req.user.id, eventId]
+    );
+    res.json({ success: true, message: 'Application withdrawn successfully' });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
-const filterStudents = async (req, res) => {
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+const getDashboard = async (req, res) => {
   try {
-    const { department, minCgpa, maxBacklogs, batch } = req.query;
+    const [[stats]] = await db.execute(`
+      SELECT
+        (SELECT COUNT(*) FROM participation WHERE student_admission_number=?) AS total_applied,
+        (SELECT COUNT(*) FROM participation WHERE student_admission_number=? AND participation_status='SELECTED') AS selected,
+        (SELECT COUNT(*) FROM participation WHERE student_admission_number=? AND participation_status='REGISTERED') AS pending,
+        (SELECT COUNT(*) FROM events WHERE status='UPCOMING' AND registration_end > NOW()) AS available_drives
+    `, [req.user.id, req.user.id, req.user.id]);
 
-    let query = 'SELECT * FROM students WHERE 1=1';
-    let params = [];
+    const [recentApplications] = await db.execute(`
+      SELECT p.participation_status, p.created_at,
+             e.event_name, e.job_role, e.expected_package,
+             c.company_name AS organizing_company
+      FROM participation p
+      JOIN events e ON p.event_id = e.event_id
+      JOIN companies c ON e.company_id = c.company_id
+      WHERE p.student_admission_number=?
+      ORDER BY p.created_at DESC LIMIT 5
+    `, [req.user.id]);
 
-    if (department) {
-      query += ' AND department = ?';
-      params.push(department);
-    }
-    if (minCgpa) {
-      query += ' AND cgpa >= ?';
-      params.push(parseFloat(minCgpa));
-    }
-    if (maxBacklogs) {
-      query += ' AND back_logs_count <= ?';
-      params.push(parseInt(maxBacklogs));
-    }
-    if (batch) {
-      query += ' AND batch = ?';
-      params.push(batch);
-    }
+    const [upcomingDrives] = await db.execute(`
+      SELECT e.*, c.company_name
+      FROM events e
+      JOIN companies c ON e.company_id = c.company_id
+      WHERE e.status='UPCOMING' AND e.registration_end > NOW()
+      AND e.event_id NOT IN (
+        SELECT event_id FROM participation WHERE student_admission_number=?
+      )
+      ORDER BY e.registration_end ASC LIMIT 5
+    `, [req.user.id]);
 
-    query += ' ORDER BY student_first_name ASC';
-
-    const [students] = await db.execute(query, params);
-    res.json(students);
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    res.json({ success: true, data: { stats, recentApplications, upcomingDrives } });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
 module.exports = {
-  getAllStudents,
-  getStudent,
-  updateStudent,
-  deleteStudent,
-  uploadResume,
-  updateResumeDriveLink,
-  getResumeDriveLink,
-  filterStudents
+  getProfile, updateProfile, changePassword,
+  uploadResume, updateResumeLink,
+  getApplications, applyToEvent, withdrawApplication,
+  getDashboard
 };

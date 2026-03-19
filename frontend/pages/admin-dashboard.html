@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - GEHU Placement Portal</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/student-dashboard.css">
+  <style>
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center; }
+    .modal-box { background:#fff; border-radius:12px; padding:2rem; width:90%; max-width:600px; max-height:90vh; overflow-y:auto; }
+    .modal-box h3 { margin:0 0 1.5rem; color:#032241; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-group { margin-bottom:1rem; }
+    .form-group label { display:block; margin-bottom:4px; font-weight:500; font-size:0.9rem; color:#374151; }
+    .form-group input, .form-group select, .form-group textarea { width:100%; padding:10px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:0.9rem; }
+    .form-group textarea { resize:vertical; min-height:80px; }
+    .modal-actions { display:flex; gap:1rem; justify-content:flex-end; margin-top:1.5rem; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #f3f4f6; font-size:0.9rem; }
+    th { background:#f9fafb; font-weight:600; color:#374151; }
+    tr:hover { background:#f9fafb; }
+    .table-responsive { overflow-x:auto; }
+    .toolbar { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
+    .search-input { padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:0.9rem; }
+    @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+  </style>
+</head>
+<body style="visibility:hidden">
+
+<div class="gehu-header">
+  <img src="../../assets/navbar-logo.png" alt="GEHU Logo" class="gehu-logo">
+  <div>
+    <h1>Graphic Era Hill University</h1>
+    <p>Placement Portal - Admin Dashboard</p>
+  </div>
+</div>
+
+<div class="container">
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="material-symbols-outlined">admin_panel_settings</span>
+      <h1>Admin<span class="accent">Panel</span></h1>
+    </div>
+    <div class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="home" onclick="showDashboard(); return false;">
+        <span class="material-symbols-outlined">dashboard</span><h3>Dashboard</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="students" onclick="navigateTo('students'); return false;">
+        <span class="material-symbols-outlined">group</span><h3>Students</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="companies" onclick="navigateTo('companies'); return false;">
+        <span class="material-symbols-outlined">business</span><h3>Companies</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="events" onclick="navigateTo('events'); return false;">
+        <span class="material-symbols-outlined">event</span><h3>Events</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="analytics" onclick="navigateTo('analytics'); return false;">
+        <span class="material-symbols-outlined">analytics</span><h3>Analytics</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="announcements" onclick="navigateTo('announcements'); return false;">
+        <span class="material-symbols-outlined">campaign</span><h3>Announcements</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="messages" onclick="navigateTo('messages'); return false;">
+        <span class="material-symbols-outlined">message</span><h3>Messages</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="profile" onclick="navigateTo('profile'); return false;">
+        <span class="material-symbols-outlined">person</span><h3>My Profile</h3>
+      </a>
+      <a href="#" class="nav-item" onclick="logout(); return false;">
+        <span class="material-symbols-outlined">logout</span><h3>Logout</h3>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <section id="home" class="main-section" style="display:block;">
+      <div class="header"><h2>Admin Dashboard</h2></div>
+      <div class="dashboard-welcome">
+        <div class="welcome-content">
+          <span class="material-symbols-outlined welcome-profile-placeholder">admin_panel_settings</span>
+          <div class="welcome-text">
+            <div class="welcome-title">Welcome, <span class="admin-name">Admin</span></div>
+            <p class="welcome-subtitle">GEHU Placement Portal — System Overview</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">group</span></div>
+          <div class="stats-value" id="stat-total-students">—</div>
+          <div class="stats-label">Total Students</div>
+          <a href="#" onclick="navigateTo('students')" class="view-more">Manage →</a>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">business</span></div>
+          <div class="stats-value" id="stat-total-companies">—</div>
+          <div class="stats-label">Total Companies</div>
+          <a href="#" onclick="navigateTo('companies')" class="view-more">Manage →</a>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">event</span></div>
+          <div class="stats-value" id="stat-upcoming-events">—</div>
+          <div class="stats-label">Upcoming Events</div>
+          <a href="#" onclick="navigateTo('events')" class="view-more">Manage →</a>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">work</span></div>
+          <div class="stats-value" id="stat-total-applications">—</div>
+          <div class="stats-label">Total Applications</div>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">check_circle</span></div>
+          <div class="stats-value" id="stat-total-selected">—</div>
+          <div class="stats-label">Students Selected</div>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">message</span></div>
+          <div class="stats-value" id="stat-unread-messages">—</div>
+          <div class="stats-label">Unread Messages</div>
+          <a href="#" onclick="navigateTo('messages')" class="view-more">View →</a>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="recent-applications card">
+          <div class="section-title">
+            <span class="material-symbols-outlined">history</span>
+            <h3>Recent Activity</h3>
+          </div>
+          <div id="recentActivityList"><p style="color:#6b7280;text-align:center;padding:1rem;">Loading...</p></div>
+        </div>
+        <div class="recent-applications card">
+          <div class="section-title">
+            <span class="material-symbols-outlined">leaderboard</span>
+            <h3>Top Companies</h3>
+          </div>
+          <div id="topCompaniesList"><p style="color:#6b7280;text-align:center;padding:1rem;">Loading...</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STUDENTS -->
+    <section id="students" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">group</span> Student Management</h3>
+        <button class="btn btn-primary" onclick="openAddStudentModal()">+ Add Student</button>
+      </div>
+      <div class="toolbar">
+        <input type="text" id="studentSearch" class="search-input" placeholder="Search by name or ID..." oninput="loadStudents()">
+        <input type="text" id="studentDeptFilter" class="search-input" placeholder="Filter by department" oninput="loadStudents()">
+        <input type="text" id="studentBatchFilter" class="search-input" placeholder="Filter by batch" oninput="loadStudents()">
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Admission No.</th><th>Name</th><th>Department</th><th>Batch</th><th>CGPA</th><th>Email</th><th>Actions</th></tr></thead>
+          <tbody id="studentsBody"><tr><td colspan="7" style="text-align:center;color:#6b7280;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- COMPANIES -->
+    <section id="companies" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">business</span> Company Management</h3>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Company ID</th><th>Company Name</th><th>HR Name</th><th>HR Email</th><th>Actions</th></tr></thead>
+          <tbody id="companiesBody"><tr><td colspan="5" style="text-align:center;color:#6b7280;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- EVENTS -->
+    <section id="events" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">event</span> Event Management</h3>
+        <button class="btn btn-primary" onclick="openAddEventModal()">+ Create Event</button>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Event Name</th><th>Company</th><th>Role</th><th>Package</th><th>Applicants</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="eventsBody"><tr><td colspan="7" style="text-align:center;color:#6b7280;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section id="analytics" class="main-section" style="display:none;">
+      <div class="section-header"><h3><span class="material-symbols-outlined">analytics</span> Placement Analytics</h3></div>
+      <div class="dashboard-grid">
+        <div class="card">
+          <h4 style="margin:0 0 1rem;">Placement by Department</h4>
+          <div class="table-responsive">
+            <table>
+              <thead><tr><th>Department</th><th>Total Students</th><th>Placed</th><th>Rate</th></tr></thead>
+              <tbody id="analyticsByDept"><tr><td colspan="4" style="text-align:center;color:#6b7280;">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <h4 style="margin:0 0 1rem;">Placement by Company</h4>
+          <div class="table-responsive">
+            <table>
+              <thead><tr><th>Company</th><th>Applicants</th><th>Selected</th><th>Max Package</th></tr></thead>
+              <tbody id="analyticsByCompany"><tr><td colspan="4" style="text-align:center;color:#6b7280;">Loading...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANNOUNCEMENTS -->
+    <section id="announcements" class="main-section" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">campaign</span> Announcements</h3>
+        <button class="btn btn-primary" onclick="openCreateAnnouncementModal()">+ New Announcement</button>
+      </div>
+      <div id="announcementsList"><p style="color:#6b7280;text-align:center;padding:2rem;">Loading...</p></div>
+    </section>
+
+    <!-- MESSAGES -->
+    <section id="messages" class="main-section" style="display:none;">
+      <div class="section-header"><h3><span class="material-symbols-outlined">message</span> Messages</h3></div>
+      <div id="messagesList"><p style="color:#6b7280;text-align:center;padding:2rem;">Loading...</p></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="profile" class="main-section card" style="display:none;">
+      <div class="section-header"><h3><span class="material-symbols-outlined">person</span> Admin Profile</h3></div>
+      <form onsubmit="saveAdminProfile(event)" style="max-width:500px;">
+        <div class="form-group"><label>Name</label><input type="text" id="edit-admin-name" required></div>
+        <div class="form-group"><label>Phone</label><input type="tel" id="edit-admin-phone"></div>
+        <div class="form-group"><label>City</label><input type="text" id="edit-admin-city"></div>
+        <div class="form-group"><label>Department</label><input type="text" id="edit-admin-dept"></div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+      <hr style="margin:2rem 0;border:none;border-top:1px solid #e5e7eb;">
+      <h4 style="margin:0 0 1rem;">Change Password</h4>
+      <form onsubmit="changeAdminPassword(event)" style="max-width:500px;">
+        <div class="form-group"><label>Current Password</label><input type="password" id="current-password" required></div>
+        <div class="form-group"><label>New Password</label><input type="password" id="new-password" required></div>
+        <div class="form-group"><label>Confirm New Password</label><input type="password" id="confirm-password" required></div>
+        <button type="submit" class="btn btn-outline">Change Password</button>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<!-- STUDENT MODAL -->
+<div class="modal-overlay" id="studentModal">
+  <div class="modal-box">
+    <h3 id="studentModalTitle">Add Student</h3>
+    <form onsubmit="submitStudentForm(event)" id="studentForm">
+      <div class="form-row">
+        <div class="form-group"><label>Admission Number *</label><input type="text" id="studentAdmissionInput" required></div>
+        <div class="form-group"><label>First Name *</label><input type="text" id="studentFirstName" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Last Name *</label><input type="text" id="studentLastName" required></div>
+        <div class="form-group"><label>Email *</label><input type="email" id="studentEmail" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Mobile</label><input type="tel" id="studentMobile"></div>
+        <div class="form-group"><label>Department *</label><input type="text" id="studentDept" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Batch *</label><input type="text" id="studentBatch" placeholder="e.g. 2023" required></div>
+        <div class="form-group"><label>CGPA *</label><input type="number" id="studentCgpa" step="0.01" min="0" max="10" required></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeStudentModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EVENT MODAL -->
+<div class="modal-overlay" id="eventModal">
+  <div class="modal-box">
+    <h3 id="eventModalTitle">Create Event</h3>
+    <input type="hidden" id="eventIdInput">
+    <form onsubmit="submitEventForm(event)" id="eventForm">
+      <div class="form-row">
+        <div class="form-group"><label>Event Name *</label><input type="text" id="eventName" required></div>
+        <div class="form-group"><label>Company ID *</label><input type="text" id="eventCompanyId" placeholder="e.g. TCS001" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Job Role *</label><input type="text" id="eventJobRole" required></div>
+        <div class="form-group"><label>Min CGPA</label><input type="number" id="eventCgpa" step="0.1" min="0" max="10"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Package (LPA)</label><input type="number" id="eventPackage" step="0.1"></div>
+        <div class="form-group"><label>Mode</label>
+          <select id="eventMode"><option value="ONLINE">Online</option><option value="OFFLINE">Offline</option><option value="HYBRID">Hybrid</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Registration Start *</label><input type="datetime-local" id="eventRegStart" required></div>
+        <div class="form-group"><label>Registration End *</label><input type="datetime-local" id="eventRegEnd" required></div>
+      </div>
+      <div class="form-group"><label>Eligible Departments (comma separated)</label><input type="text" id="eventDepts" placeholder="Computer Science & Engineering,Information Technology"></div>
+      <div class="form-group"><label>Description *</label><textarea id="eventDescription" required></textarea></div>
+      <div class="form-group"><label>Status</label>
+        <select id="eventStatus"><option value="UPCOMING">Upcoming</option><option value="ONGOING">Ongoing</option><option value="COMPLETED">Completed</option><option value="CANCELLED">Cancelled</option></select>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeEventModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- REPLY MODAL -->
+<div class="modal-overlay" id="replyModal">
+  <div class="modal-box">
+    <h3 id="replyModalTitle">Reply to Message</h3>
+    <input type="hidden" id="replyMessageId">
+    <form onsubmit="submitReply(event)">
+      <div class="form-group"><label>Your Reply *</label><textarea id="replyText" rows="5" required placeholder="Type your reply here..."></textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeReplyModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Send Reply</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ANNOUNCEMENT MODAL -->
+<div class="modal-overlay" id="announcementModal">
+  <div class="modal-box">
+    <h3 id="annModalTitle">Create Announcement</h3>
+    <input type="hidden" id="annIdInput">
+    <form onsubmit="submitAnnouncementForm(event)">
+      <div class="form-group"><label>Title *</label><input type="text" id="annTitle" required></div>
+      <div class="form-group"><label>Content *</label><textarea id="annContent" rows="5" required></textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeAnnouncementModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="gehu-footer"><p>&copy; 2026 Graphic Era Hill University. All rights reserved.</p></div>
+
+<script src="../scripts/api.js"></script>
+<script src="../scripts/auth.js"></script>
+<script src="../scripts/admin.js"></script>
+</body>
+</html>

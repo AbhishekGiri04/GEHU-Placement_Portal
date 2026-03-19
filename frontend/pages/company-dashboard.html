@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company Dashboard - GEHU Placement Portal</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/company-dashboard.css">
+  <style>
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center; }
+    .modal-box { background:#fff; border-radius:12px; padding:2rem; width:90%; max-width:600px; max-height:90vh; overflow-y:auto; }
+    .modal-box h3 { margin:0 0 1.5rem; color:#032241; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    .form-group { margin-bottom:1rem; }
+    .form-group label { display:block; margin-bottom:4px; font-weight:500; font-size:0.9rem; color:#374151; }
+    .form-group input, .form-group select, .form-group textarea { width:100%; padding:10px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:0.9rem; }
+    .form-group textarea { resize:vertical; min-height:80px; }
+    .modal-actions { display:flex; gap:1rem; justify-content:flex-end; margin-top:1.5rem; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #f3f4f6; font-size:0.9rem; }
+    th { background:#f9fafb; font-weight:600; color:#374151; }
+    tr:hover { background:#f9fafb; }
+    .table-responsive { overflow-x:auto; }
+    .toolbar { display:flex; gap:1rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
+    .search-input { padding:8px 12px; border:1px solid #d1d5db; border-radius:6px; font-size:0.9rem; }
+    @keyframes slideIn { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
+  </style>
+</head>
+<body style="visibility:hidden">
+
+<div class="gehu-header">
+  <img src="../../assets/navbar-logo.png" alt="GEHU Logo" class="gehu-logo">
+  <div>
+    <h1>Graphic Era Hill University</h1>
+    <p>Placement Portal - Company Dashboard</p>
+  </div>
+</div>
+
+<div class="container">
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="material-symbols-outlined">business</span>
+      <h1>Company<span class="accent">Portal</span></h1>
+    </div>
+    <div class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="dashboard" onclick="showDashboard(); return false;">
+        <span class="material-symbols-outlined">dashboard</span><h3>Dashboard</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="drives" onclick="navigateTo('drives'); return false;">
+        <span class="material-symbols-outlined">event</span><h3>My Drives</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="applicants" onclick="showSection('applicants'); return false;">
+        <span class="material-symbols-outlined">group</span><h3>Applicants</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="profile" onclick="navigateTo('profile'); return false;">
+        <span class="material-symbols-outlined">person</span><h3>Profile</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="messages" onclick="navigateTo('messages'); return false;">
+        <span class="material-symbols-outlined">message</span><h3>Messages</h3>
+      </a>
+      <a href="#" class="nav-item" onclick="logout(); return false;">
+        <span class="material-symbols-outlined">logout</span><h3>Logout</h3>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="main-section" style="display:block;">
+      <div class="header"><h2>Company Dashboard</h2></div>
+      <div class="dashboard-welcome">
+        <div class="welcome-content">
+          <span class="material-symbols-outlined welcome-profile-placeholder">business</span>
+          <div class="welcome-text">
+            <div class="welcome-title">Welcome, <span class="company-name">Company</span></div>
+            <p class="welcome-subtitle">Manage your placement drives and applicants</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">event</span></div>
+          <div class="stats-value" id="stat-total-drives">—</div>
+          <div class="stats-label">Total Drives</div>
+          <a href="#" onclick="navigateTo('drives')" class="view-more">Manage →</a>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">upcoming</span></div>
+          <div class="stats-value" id="stat-upcoming-drives">—</div>
+          <div class="stats-label">Upcoming Drives</div>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">group</span></div>
+          <div class="stats-value" id="stat-total-applicants">—</div>
+          <div class="stats-label">Total Applicants</div>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">check_circle</span></div>
+          <div class="stats-value" id="stat-selected">—</div>
+          <div class="stats-label">Students Selected</div>
+        </div>
+      </div>
+
+      <div class="recent-applications card" style="margin-top:1.5rem;">
+        <div class="section-title">
+          <span class="material-symbols-outlined">history</span>
+          <h3>Recent Applicants</h3>
+        </div>
+        <div id="recentApplicantsList"><p style="color:#6b7280;text-align:center;padding:1rem;">Loading...</p></div>
+      </div>
+    </section>
+
+    <!-- DRIVES -->
+    <section id="drives" class="main-section" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">event</span> My Placement Drives</h3>
+        <button class="btn btn-primary" onclick="openCreateDriveModal()">+ Create Drive</button>
+      </div>
+      <div id="drivesContainer"><p style="color:#6b7280;padding:1rem;">Loading...</p></div>
+    </section>
+
+    <!-- APPLICANTS -->
+    <section id="applicants" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3 id="applicantsEventTitle"><span class="material-symbols-outlined">group</span> Applicants</h3>
+      </div>
+      <div class="toolbar">
+        <input type="text" id="filterDept" class="search-input" placeholder="Department">
+        <select id="filterStatus" class="search-input">
+          <option value="">All Status</option>
+          <option value="REGISTERED">Registered</option>
+          <option value="ATTEMPTED">Attempted</option>
+          <option value="SELECTED">Selected</option>
+          <option value="REJECTED">Rejected</option>
+        </select>
+        <button class="btn btn-outline" onclick="filterApplicants()">Filter</button>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead><tr><th>Name</th><th>Department</th><th>CGPA</th><th>Batch</th><th>Resume</th><th>Status</th><th>Contact</th></tr></thead>
+          <tbody id="applicantsBody"><tr><td colspan="7" style="text-align:center;color:#6b7280;">Select a drive to view applicants</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MESSAGES -->
+    <section id="messages" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">message</span> Contact Admin</h3>
+        <button class="btn btn-primary" onclick="document.getElementById('companyMsgModal').style.display='flex'">+ New Message</button>
+      </div>
+      <div id="companyMessagesList"><p style="color:#6b7280;text-align:center;padding:2rem;">Use the button above to send a message to the placement admin.</p></div>
+    </section>
+
+    <!-- PROFILE -->
+    <section id="profile" class="main-section card" style="display:none;">
+      <div class="section-header"><h3><span class="material-symbols-outlined">person</span> Company Profile</h3></div>
+      <form onsubmit="saveCompanyProfile(event)" style="max-width:500px;">
+        <div class="form-group"><label>Company Name</label><input type="text" id="edit-company-name" required></div>
+        <div class="form-group"><label>HR Name</label><input type="text" id="edit-hr-name" required></div>
+        <div class="form-group"><label>HR Phone</label><input type="tel" id="edit-hr-phone"></div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </form>
+      <hr style="margin:2rem 0;border:none;border-top:1px solid #e5e7eb;">
+      <h4 style="margin:0 0 1rem;">Change Password</h4>
+      <form onsubmit="changeCompanyPassword(event)" style="max-width:500px;">
+        <div class="form-group"><label>Current Password</label><input type="password" id="current-password" required></div>
+        <div class="form-group"><label>New Password</label><input type="password" id="new-password" required></div>
+        <div class="form-group"><label>Confirm New Password</label><input type="password" id="confirm-password" required></div>
+        <button type="submit" class="btn btn-outline">Change Password</button>
+      </form>
+    </section>
+
+  </main>
+</div>
+
+<!-- COMPANY MESSAGE MODAL -->
+<div class="modal-overlay" id="companyMsgModal">
+  <div class="modal-box">
+    <h3>Send Message to Admin</h3>
+    <form onsubmit="sendCompanyMessage(event)">
+      <div class="form-group"><label>Subject *</label><input type="text" id="companyMsgSubject" required></div>
+      <div class="form-group"><label>Message *</label><textarea id="companyMsgBody" rows="4" required></textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('companyMsgModal').style.display='none'">Cancel</button>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- DRIVE MODAL -->
+<div class="modal-overlay" id="driveModal">
+  <div class="modal-box">
+    <h3 id="driveModalTitle">Create Drive</h3>
+    <input type="hidden" id="driveEventId">
+    <form onsubmit="submitDriveForm(event)" id="driveForm">
+      <div class="form-row">
+        <div class="form-group"><label>Drive Name *</label><input type="text" id="driveEventName" required></div>
+        <div class="form-group"><label>Job Role *</label><input type="text" id="driveJobRole" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Min CGPA</label><input type="number" id="driveExpectedCgpa" step="0.1" min="0" max="10"></div>
+        <div class="form-group"><label>Package (LPA)</label><input type="number" id="driveExpectedPackage" step="0.1"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Mode</label>
+          <select id="driveMode"><option value="ONLINE">Online</option><option value="OFFLINE">Offline</option><option value="HYBRID">Hybrid</option></select>
+        </div>
+        <div class="form-group"><label>Status</label>
+          <select id="driveStatus"><option value="UPCOMING">Upcoming</option><option value="ONGOING">Ongoing</option><option value="COMPLETED">Completed</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Registration Start *</label><input type="datetime-local" id="driveRegStart" required></div>
+        <div class="form-group"><label>Registration End *</label><input type="datetime-local" id="driveRegEnd" required></div>
+      </div>
+      <div class="form-group"><label>Eligible Departments (comma separated)</label><input type="text" id="driveEligibleDepts" placeholder="Computer Science & Engineering,Information Technology"></div>
+      <div class="form-group"><label>Description *</label><textarea id="driveDescription" required></textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="closeDriveModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Drive</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="gehu-footer"><p>&copy; 2026 Graphic Era Hill University. All rights reserved.</p></div>
+
+<script src="../scripts/api.js"></script>
+<script src="../scripts/auth.js"></script>
+<script src="../scripts/company.js"></script>
+</body>
+</html>

@@ -1,69 +1,38 @@
-# Dependencies
+# ─── Dependencies ────────────────────────────────────────────
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
-yarn.lock
 
-# Environment variables
+# ─── Environment Variables ───────────────────────────────────
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# Logs
-logs
+# ─── Logs ────────────────────────────────────────────────────
 *.log
+logs/
+backend.log
+frontend.log
 
-# Runtime data
-pids
+# ─── Runtime / Process ───────────────────────────────────────
+pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
+# ─── Uploaded Files (keep folder structure via .gitkeep) ─────
+backend/uploads/resumes/*.pdf
+backend/uploads/resumes/*.doc
+backend/uploads/resumes/*.docx
 
-# nyc test coverage
-.nyc_output
-
-# Dependency directories
-jspm_packages/
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# parcel-bundler cache
-.cache
-.parcel-cache
-
-# Temporary folders
-tmp/
-temp/
-
-# Uploads and user generated content
-uploads/
-*.pdf
-*.doc
-*.docx
-
-# Database
+# ─── Database ────────────────────────────────────────────────
 *.sqlite
 *.db
 
-# OS generated files
+# ─── OS Generated ────────────────────────────────────────────
 .DS_Store
 .DS_Store?
 ._*
@@ -72,14 +41,29 @@ uploads/
 ehthumbs.db
 Thumbs.db
 
-# IDE files
+# ─── IDE / Editor ────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Build outputs
+# ─── Build Outputs ───────────────────────────────────────────
 build/
 dist/
 out/
+.cache/
+.parcel-cache/
+
+# ─── Coverage ────────────────────────────────────────────────
+coverage/
+*.lcov
+.nyc_output/
+
+# ─── Misc ────────────────────────────────────────────────────
+*.tgz
+.npm
+.eslintcache
+.yarn-integrity
+tmp/
+temp/

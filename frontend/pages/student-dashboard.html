@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Portal - Graphic Era Hill University</title>
+  <link rel="icon" type="image/png" href="../../assets/favicon.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/student-dashboard.css">
+  <style>
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center;}
+    .modal-box{background:#fff;border-radius:12px;padding:2rem;width:90%;max-width:560px;max-height:90vh;overflow-y:auto;}
+    .modal-box h3{margin:0 0 1.5rem;color:#032241;}
+    .form-group{margin-bottom:1rem;}
+    .form-group label{display:block;margin-bottom:4px;font-weight:500;font-size:0.9rem;color:#374151;}
+    .form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;font-size:0.9rem;box-sizing:border-box;}
+    .form-group textarea{resize:vertical;min-height:80px;}
+    .modal-actions{display:flex;gap:1rem;justify-content:flex-end;margin-top:1.5rem;}
+    .ann-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:1.2rem;margin-bottom:1rem;border-left:4px solid #3b82f6;}
+    .ann-card h5{margin:0 0 6px;color:#1e3a5f;font-size:1rem;}
+    .ann-card p{margin:0 0 8px;color:#374151;font-size:0.9rem;line-height:1.5;}
+    .ann-card small{color:#9ca3af;font-size:0.8rem;}
+    .msg-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:1.2rem;margin-bottom:1rem;}
+    .msg-card.unread{border-left:4px solid #3b82f6;}
+    .msg-card.replied{border-left:4px solid #10b981;}
+    .msg-reply-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:1rem;margin-top:0.8rem;}
+    .msg-reply-box p{margin:0;color:#166534;font-size:0.9rem;}
+    .analytics-stat{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;}
+    .analytics-stat .val{font-size:2rem;font-weight:700;color:#1e3a5f;}
+    .analytics-stat .lbl{font-size:0.85rem;color:#6b7280;margin-top:4px;}
+    .progress-bar-bg{background:#e5e7eb;border-radius:999px;height:8px;margin-top:6px;}
+    .progress-bar-fill{background:linear-gradient(90deg,#3b82f6,#1d4ed8);border-radius:999px;height:8px;transition:width 0.6s ease;}
+    @keyframes slideIn{from{opacity:0;transform:translateX(20px);}to{opacity:1;transform:translateX(0);}}
+  </style>
+</head>
+<body style="visibility:hidden">
+
+<div class="gehu-header">
+  <img src="../../assets/navbar-logo.png" alt="GEHU Logo" class="gehu-logo">
+  <div>
+    <h1>Graphic Era Hill University</h1>
+    <p>Placement Portal - Student Dashboard</p>
+  </div>
+</div>
+
+<div class="container">
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="material-symbols-outlined">school</span>
+      <h1>Student<span class="accent">Page</span></h1>
+    </div>
+    <div class="sidebar-nav">
+      <a href="#" class="nav-item active" data-section="home" onclick="showDashboard(); return false;">
+        <span class="material-symbols-outlined">dashboard</span><h3>Dashboard</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="profile" onclick="navigateTo('profile'); return false;">
+        <span class="material-symbols-outlined">person</span><h3>My Profile</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="applications" onclick="navigateTo('applications'); return false;">
+        <span class="material-symbols-outlined">work</span><h3>My Applications</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="events" onclick="navigateTo('events'); return false;">
+        <span class="material-symbols-outlined">business</span><h3>Company Drives</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="resume" onclick="navigateTo('resume'); return false;">
+        <span class="material-symbols-outlined">description</span><h3>Resume / Docs</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="analytics" onclick="navigateTo('analytics'); return false;">
+        <span class="material-symbols-outlined">analytics</span><h3>Analytics</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="announcements" onclick="navigateTo('announcements'); return false;">
+        <span class="material-symbols-outlined">campaign</span><h3>Announcements</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="messages" onclick="navigateTo('messages'); return false;">
+        <span class="material-symbols-outlined">message</span><h3>Messages</h3>
+      </a>
+      <a href="#" class="nav-item" data-section="settings" onclick="navigateTo('settings'); return false;">
+        <span class="material-symbols-outlined">settings</span><h3>Settings</h3>
+      </a>
+      <a href="#" class="nav-item" onclick="logout(); return false;">
+        <span class="material-symbols-outlined">logout</span><h3>Logout</h3>
+      </a>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <!-- ── DASHBOARD ── -->
+    <section id="home" class="main-section" style="display:block;">
+      <div class="header"><h2>Student Dashboard</h2></div>
+
+      <div class="dashboard-welcome">
+        <div class="welcome-content">
+          <span class="material-symbols-outlined welcome-profile-placeholder">account_circle</span>
+          <div class="welcome-text">
+            <div class="welcome-title">Welcome back, <span class="student-name">—</span></div>
+            <p class="welcome-subtitle" id="studentIdDisplay"></p>
+            <p class="welcome-subtitle" id="studentEmailDisplay"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">work</span></div>
+          <div class="stats-value" id="stat-total-applied">—</div>
+          <div class="stats-label">Total Drives Applied</div>
+          <a href="#" onclick="navigateTo('applications')" class="view-more">View Details →</a>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">check_circle</span></div>
+          <div class="stats-value" id="stat-selected">—</div>
+          <div class="stats-label">Companies Selected You</div>
+          <a href="#" onclick="navigateTo('applications')" class="view-more">View All →</a>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">event</span></div>
+          <div class="stats-value" id="stat-available-drives">—</div>
+          <div class="stats-label">Available Drives</div>
+          <a href="#" onclick="navigateTo('events')" class="view-more">Register Now →</a>
+        </div>
+        <div class="stats-card card hover-scale">
+          <div class="stats-icon"><span class="material-symbols-outlined">pending</span></div>
+          <div class="stats-value" id="stat-pending">—</div>
+          <div class="stats-label">Pending Applications</div>
+          <a href="#" onclick="navigateTo('analytics')" class="view-more">Track Progress →</a>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="recent-applications card">
+          <div class="section-title">
+            <span class="material-symbols-outlined">work_history</span>
+            <h3>Recent Applications</h3>
+          </div>
+          <div id="recentApplicationsList"><p style="color:#6b7280;text-align:center;padding:1rem;">Loading...</p></div>
+          <button class="btn btn-outline view-all-btn" onclick="navigateTo('applications')">View All Applications</button>
+        </div>
+        <div class="recent-applications card">
+          <div class="section-title">
+            <span class="material-symbols-outlined">campaign</span>
+            <h3>Latest Announcements</h3>
+          </div>
+          <div id="dashboardAnnouncements"><p style="color:#6b7280;text-align:center;padding:1rem;">Loading...</p></div>
+          <button class="btn btn-outline view-all-btn" onclick="navigateTo('announcements')">View All →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROFILE ── -->
+    <section id="profile" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3>Student Profile</h3>
+        <button class="btn btn-primary" onclick="document.getElementById('editProfileModal').style.display='flex'">Edit Profile</button>
+      </div>
+
+      <div class="id-card-container">
+        <div class="id-card-header">
+          <span class="material-symbols-outlined" style="font-size:4rem;color:#3b82f6;">account_circle</span>
+          <h2 id="profile-name">—</h2>
+          <div class="id-details">
+            <div>ID: <span id="profile-id">—</span> | Roll: <span id="profile-roll">—</span></div>
+            <div id="profile-college-email">—</div>
+            <div id="profile-phone">—</div>
+          </div>
+          <div class="program-badge" id="profile-program">—</div>
+        </div>
+        <div class="id-card-body">
+          <div class="info-grid-three">
+            <div class="info-column">
+              <div class="info-group"><label>Father Name:</label><span id="profile-father">—</span></div>
+              <div class="info-group"><label>Mother Name:</label><span id="profile-mother">—</span></div>
+              <div class="info-group"><label>Date of Birth:</label><span id="profile-dob">—</span></div>
+              <div class="info-group"><label>Personal Email:</label><span id="profile-email">—</span></div>
+            </div>
+            <div class="info-column">
+              <div class="info-group"><label>Course:</label><span id="profile-course">—</span></div>
+              <div class="info-group"><label>Department:</label><span id="profile-dept">—</span></div>
+              <div class="info-group"><label>Batch:</label><span id="profile-batch">—</span></div>
+              <div class="info-group"><label>CGPA:</label><span id="profile-cgpa">—</span></div>
+            </div>
+            <div class="info-column">
+              <div class="info-group"><label>10th %:</label><span id="profile-10th">—</span></div>
+              <div class="info-group"><label>12th %:</label><span id="profile-12th">—</span></div>
+              <div class="info-group"><label>Backlogs:</label><span id="profile-backlogs">—</span></div>
+              <div class="info-group"><label>Address:</label><span id="profile-address">—</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── EVENTS ── -->
+    <section id="events" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">event</span> Upcoming Placement Drives</h3>
+        <div class="toolbar" style="margin:0;">
+          <input type="text" id="driveSearch" class="search-input" placeholder="Search companies..." oninput="filterDrives()">
+          <select id="driveSort" class="sort-select" onchange="filterDrives()">
+            <option value="latest">Latest First</option>
+            <option value="package">Highest Package</option>
+            <option value="deadline">Closest Deadline</option>
+          </select>
+          <button class="btn btn-primary" onclick="loadEvents()">Refresh</button>
+        </div>
+      </div>
+      <div class="events-grid" id="eventsGrid"></div>
+      <div class="events-empty" id="eventsEmpty" style="display:none;text-align:center;padding:3rem;color:#6b7280;">
+        <span class="material-symbols-outlined" style="font-size:3rem;display:block;margin-bottom:1rem;">search_off</span>
+        <h3>No placement drives found</h3>
+        <p>Check back later for new opportunities</p>
+      </div>
+    </section>
+
+    <!-- ── APPLICATIONS ── -->
+    <section id="applications" class="main-section card" style="display:none;">
+      <div class="section-header">
+        <h3>My Applications</h3>
+        <div style="display:flex;gap:8px;">
+          <button onclick="exportApplications()" class="btn btn-primary">Export CSV</button>
+          <button onclick="loadApplications()" class="btn btn-outline">Refresh</button>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input type="text" id="appSearch" class="search-input" placeholder="Search by company..." oninput="filterApplications()">
+        <select id="appStatusFilter" class="sort-select" onchange="filterApplications()">
+          <option value="">All Status</option>
+          <option value="REGISTERED">Registered</option>
+          <option value="ATTEMPTED">Attempted</option>
+          <option value="SELECTED">Selected</option>
+          <option value="REJECTED">Rejected</option>
+          <option value="ABSENT">Absent</option>
+        </select>
+      </div>
+      <div class="table-responsive">
+        <table class="applications-table">
+          <thead>
+            <tr><th>Company</th><th>Role</th><th>Applied On</th><th>Status</th><th>Package</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="applicationsBody">
+            <tr><td colspan="6" style="text-align:center;color:#6b7280;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="appPagination" style="display:flex;justify-content:center;gap:8px;margin-top:1rem;"></div>
+    </section>
+
+    <!-- ── RESUME ── -->
+    <section id="resume" class="main-section card" style="display:none;">
+      <div class="section-header"><h3>Resume Management</h3></div>
+      <div class="resume-content">
+        <div class="upload-container">
+          <div class="upload-area" id="uploadArea">
+            <div class="upload-icon"><span class="material-symbols-outlined">cloud_upload</span></div>
+            <div class="upload-text">
+              <div class="upload-title">Drop your resume here or click to upload</div>
+              <div class="upload-subtitle">PDF only · Max 5MB</div>
+            </div>
+            <input type="file" id="resumeUpload" accept="application/pdf" style="display:none;">
+            <button class="btn btn-primary" id="selectResumeBtn" onclick="document.getElementById('resumeUpload').click()">Choose File</button>
+          </div>
+          <div id="resumePreviewArea" class="resume-preview" style="display:none;">
+            <div class="preview-content">
+              <div class="file-info">
+                <div id="resumeFileName" class="file-name"></div>
+              </div>
+              <div class="file-actions">
+                <a id="downloadResumeBtn" class="btn btn-primary" target="_blank">View Resume</a>
+                <button class="btn btn-outline" onclick="clearResume()">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:1.5rem;">
+          <h4 style="margin:0 0 0.5rem;">Or link a Google Drive / OneDrive URL</h4>
+          <form onsubmit="saveResumeLink(event)" style="display:flex;gap:8px;max-width:500px;">
+            <input type="url" id="resumeDriveLink" class="form-control" placeholder="https://drive.google.com/..." style="flex:1;padding:10px 12px;border:1px solid #d1d5db;border-radius:6px;">
+            <button type="submit" class="btn btn-primary">Save Link</button>
+          </form>
+        </div>
+        <div class="last-updated" style="margin-top:1rem;color:#6b7280;font-size:0.85rem;">
+          Last updated: <span id="resumeLastUpdated">Never</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ANALYTICS ── -->
+    <section id="analytics" class="main-section" style="display:none;">
+      <div class="section-header"><h3>My Placement Analytics</h3></div>
+      <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin-bottom:2rem;">
+        <div class="analytics-stat"><div class="val" id="an-applied">—</div><div class="lbl">Total Applied</div></div>
+        <div class="analytics-stat"><div class="val" id="an-selected">—</div><div class="lbl">Selected</div></div>
+        <div class="analytics-stat"><div class="val" id="an-pending">—</div><div class="lbl">Pending</div></div>
+        <div class="analytics-stat"><div class="val" id="an-rate">—%</div><div class="lbl">Success Rate</div></div>
+      </div>
+
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h4 style="margin:0 0 1rem;">Application Status Breakdown</h4>
+        <div id="analyticsStatusBars"></div>
+      </div>
+
+      <div class="card">
+        <h4 style="margin:0 0 1rem;">Applications by Company</h4>
+        <div class="table-responsive">
+          <table>
+            <thead><tr><th>Company</th><th>Role</th><th>Applied On</th><th>Status</th><th>Package</th></tr></thead>
+            <tbody id="analyticsTable"><tr><td colspan="5" style="text-align:center;color:#6b7280;">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ANNOUNCEMENTS ── -->
+    <section id="announcements" class="main-section" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">campaign</span> Announcements</h3>
+        <span id="annNewBadge" class="status-badge" style="background:#3b82f6;color:#fff;display:none;"></span>
+      </div>
+      <div id="announcementsList"><p style="color:#6b7280;text-align:center;padding:2rem;">Loading...</p></div>
+    </section>
+
+    <!-- ── MESSAGES ── -->
+    <section id="messages" class="main-section" style="display:none;">
+      <div class="section-header">
+        <h3><span class="material-symbols-outlined">message</span> Messages</h3>
+        <button class="btn btn-primary" onclick="document.getElementById('composeModal').style.display='flex'">+ New Message</button>
+      </div>
+      <div id="messagesList"><p style="color:#6b7280;text-align:center;padding:2rem;">Loading...</p></div>
+    </section>
+
+    <!-- ── SETTINGS ── -->
+    <section id="settings" class="main-section" style="display:none;">
+      <div class="section-header"><h3>Account Settings</h3></div>
+
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h4 style="margin:0 0 1.2rem;">Update Contact Information</h4>
+        <form onsubmit="saveProfile(event)" id="profileUpdateForm">
+          <div class="form-group"><label>Personal Email</label><input type="email" id="edit-email" required></div>
+          <div class="form-group"><label>Mobile Number</label><input type="tel" id="edit-mobile"></div>
+          <div class="form-group"><label>Address</label><textarea id="edit-address" rows="2"></textarea></div>
+          <div class="form-group"><label>Active Backlogs</label><input type="number" id="edit-backlogs" min="0" value="0"></div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <h4 style="margin:0 0 1.2rem;">Change Password</h4>
+        <form onsubmit="changePassword(event)" id="changePasswordForm">
+          <div class="form-group"><label>Current Password</label><input type="password" id="current-password" required></div>
+          <div class="form-group"><label>New Password <small style="color:#6b7280;">(min 8 chars, include a number)</small></label><input type="password" id="new-password" required minlength="8"></div>
+          <div class="form-group"><label>Confirm New Password</label><input type="password" id="confirm-password" required></div>
+          <button type="submit" class="btn btn-outline">Change Password</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ── HELP ── -->
+    <section id="help" class="main-section" style="display:none;">
+      <div class="section-header"><h3>Help & Support</h3></div>
+      <div class="card" style="max-width:700px;">
+        <h4>Frequently Asked Questions</h4>
+        <div class="faq-item"><h5>How do I apply for placement drives?</h5><p>Go to Company Drives section and click "Apply Now" on any open drive.</p></div>
+        <div class="faq-item"><h5>How can I update my resume?</h5><p>Visit the Resume section to upload a PDF or link a Google Drive URL.</p></div>
+        <div class="faq-item"><h5>How do I check my application status?</h5><p>Visit My Applications section to track all your application statuses.</p></div>
+        <div class="faq-item"><h5>How do I contact the placement cell?</h5><p>Use the Messages section to send a message directly to the admin.</p></div>
+      </div>
+      <div class="card" style="max-width:700px;margin-top:1.5rem;">
+        <h4>Contact Placement Cell</h4>
+        <p>📧 placement@gehu.ac.in &nbsp;|&nbsp; 📞 +91 9876543210 &nbsp;|&nbsp; 🕐 Mon–Fri 9AM–6PM</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── EDIT PROFILE MODAL ── -->
+<div class="modal-overlay" id="editProfileModal">
+  <div class="modal-box">
+    <h3>Edit Profile</h3>
+    <form onsubmit="saveProfile(event)">
+      <div class="form-group"><label>Personal Email</label><input type="email" id="modal-edit-email" required></div>
+      <div class="form-group"><label>Mobile Number</label><input type="tel" id="modal-edit-mobile"></div>
+      <div class="form-group"><label>Address</label><textarea id="modal-edit-address" rows="2"></textarea></div>
+      <div class="form-group"><label>Active Backlogs</label><input type="number" id="modal-edit-backlogs" min="0" value="0"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('editProfileModal').style.display='none'">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ── COMPOSE MESSAGE MODAL ── -->
+<div class="modal-overlay" id="composeModal">
+  <div class="modal-box">
+    <h3>Send Message to Admin</h3>
+    <form onsubmit="sendMessage(event)">
+      <div class="form-group"><label>Subject *</label><input type="text" id="msgSubject" required></div>
+      <div class="form-group"><label>Message *</label><textarea id="msgBody" rows="4" required></textarea></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('composeModal').style.display='none'">Cancel</button>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="gehu-footer"><p>&copy; 2026 Graphic Era Hill University. All rights reserved.</p></div>
+
+<script src="../scripts/api.js"></script>
+<script src="../scripts/auth.js"></script>
+<script src="../scripts/student.js"></script>
+</body>
+</html>

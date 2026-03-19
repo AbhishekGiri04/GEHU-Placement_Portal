@@ -1,20 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const eventController = require('../controllers/eventController');
-const auth = require('../middleware/auth');
+const c = require('../controllers/eventController');
 
-// Public routes
-router.get('/', eventController.getAllEvents);
-router.get('/upcoming', eventController.getUpcomingEvents);
-router.get('/:id', eventController.getEventById);
-
-// Protected routes
-router.post('/', auth, eventController.createEvent);
-router.put('/:id', auth, eventController.updateEvent);
-router.delete('/:id', auth, eventController.deleteEvent);
-
-// Event participation
-router.get('/:id/participants', auth, eventController.getEventParticipants);
-router.post('/:id/apply', auth, eventController.applyToEvent);
+// All public — no auth needed for browsing events
+router.get('/', c.getAllEvents);
+router.get('/upcoming', c.getUpcomingEvents);
+router.get('/company/:companyId', c.getEventsByCompany);
+router.get('/:id', c.getEventById);
 
 module.exports = router;

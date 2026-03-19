@@ -41,9 +41,10 @@ const getStudentParticipations = async (req, res) => {
     const { studentAdmissionNumber } = req.params;
 
     const [participations] = await db.execute(`
-      SELECT p.*, e.event_name, e.organizing_company, e.job_role, e.expected_package, e.status as event_status
+      SELECT p.*, e.event_name, c.company_name AS organizing_company, e.job_role, e.expected_package, e.status as event_status
       FROM participation p
       JOIN events e ON p.event_id = e.event_id
+      JOIN companies c ON e.company_id = c.company_id
       WHERE p.student_admission_number = ?
       ORDER BY p.created_at DESC
     `, [studentAdmissionNumber]);
@@ -102,10 +103,11 @@ const getAllParticipations = async (req, res) => {
     const [participations] = await db.execute(`
       SELECT p.*, 
         s.student_first_name, s.student_last_name, s.department, s.cgpa, s.batch,
-        e.event_name, e.organizing_company, e.job_role, e.expected_package
+        e.event_name, c.company_name AS organizing_company, e.job_role, e.expected_package
       FROM participation p
       JOIN students s ON p.student_admission_number = s.student_admission_number
       JOIN events e ON p.event_id = e.event_id
+      JOIN companies c ON e.company_id = c.company_id
       ORDER BY p.created_at DESC
     `);
 

@@ -1,31 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const adminController = require('../controllers/adminController');
 const auth = require('../middleware/auth');
+const role = require('../middleware/roleMiddleware');
+const c = require('../controllers/adminController');
 
-// Dashboard and analytics
-router.get('/dashboard', auth, adminController.getDashboardData);
-router.get('/analytics', auth, adminController.getAnalytics);
+router.get('/dashboard', auth, role('admin'), c.getDashboardStats);
+router.get('/analytics', auth, role('admin'), c.getAnalytics);
+router.get('/profile', auth, role('admin'), c.getProfile);
+router.put('/profile', auth, role('admin'), c.updateProfile);
+router.put('/change-password', auth, role('admin'), c.changePassword);
 
-// Student management
-router.get('/students', auth, adminController.getAllStudents);
-router.post('/students/register', auth, adminController.registerStudent);
-router.put('/students/:id', auth, adminController.updateStudent);
-router.delete('/students/:id', auth, adminController.deleteStudent);
+router.get('/students', auth, role('admin'), c.getAllStudents);
+router.post('/students', auth, role('admin'), c.registerStudent);
+router.put('/students/:id', auth, role('admin'), c.updateStudent);
+router.delete('/students/:id', auth, role('admin'), c.deleteStudent);
 
-// Company management
-router.get('/companies', auth, adminController.getAllCompanies);
-router.post('/companies/register', auth, adminController.registerCompany);
-router.put('/companies/:id', auth, adminController.updateCompany);
+router.get('/companies', auth, role('admin'), c.getAllCompanies);
+router.post('/companies', auth, role('admin'), c.registerCompany);
+router.put('/companies/:id', auth, role('admin'), c.updateCompany);
+router.delete('/companies/:id', auth, role('admin'), c.deleteCompany);
 
-// Event management
-router.get('/events', auth, adminController.getAllEvents);
-router.post('/events', auth, adminController.createEvent);
-router.put('/events/:id', auth, adminController.updateEvent);
-router.delete('/events/:id', auth, adminController.deleteEvent);
+router.get('/events', auth, role('admin'), c.getAllEvents);
+router.post('/events', auth, role('admin'), c.createEvent);
+router.put('/events/:id', auth, role('admin'), c.updateEvent);
+router.delete('/events/:id', auth, role('admin'), c.deleteEvent);
 
-// Reports
-router.get('/reports/placements', auth, adminController.getPlacementReport);
-router.get('/reports/students', auth, adminController.getStudentReport);
+router.get('/messages', auth, role('admin'), c.getMessages);
+router.put('/messages/:id/read', auth, role('admin'), c.markMessageRead);
+router.post('/messages/:id/reply', auth, role('admin'), c.replyToMessage);
+router.delete('/messages/:id', auth, role('admin'), c.deleteMessage);
+
+router.get('/announcements', auth, role('admin'), c.getAnnouncements);
+router.post('/announcements', auth, role('admin'), c.createAnnouncement);
+router.put('/announcements/:id', auth, role('admin'), c.updateAnnouncement);
+router.delete('/announcements/:id', auth, role('admin'), c.deleteAnnouncement);
 
 module.exports = router;

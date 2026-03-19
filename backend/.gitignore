@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+
+# Environment — NEVER commit real credentials
+.env
+.env.local
+.env.*.local
+
+# Uploaded files
+uploads/resumes/*.pdf
+uploads/resumes/*.doc
+uploads/resumes/*.docx
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

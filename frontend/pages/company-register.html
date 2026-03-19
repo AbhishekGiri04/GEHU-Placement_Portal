@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Registration - GEHU Placement Portal</title>
+    <link rel="icon" type="image/png" href="../../assets/favicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f6f6f9 0%, #e2e8f0 100%);
+            min-height: 100vh;
+        }
+        
+        .gehu-header {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .gehu-logo {
+            height: 50px;
+        }
+        
+        .gehu-header h1 {
+            color: #1e293b;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .gehu-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .register-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        }
+        
+        .header-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #7380ec, #5a67d8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            box-shadow: 0 10px 30px rgba(115,128,236,0.3);
+        }
+        
+        .header-icon span {
+            font-size: 2.5rem;
+            color: white;
+        }
+        
+        .card-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-container {
+            padding: 2rem;
+        }
+        
+        .form-section {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .section-title span {
+            color: #7380ec;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control {
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #7380ec;
+            box-shadow: 0 0 0 4px rgba(115,128,236,0.1);
+        }
+        
+        .form-control.valid {
+            border-color: #10b981;
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.1);
+        }
+        
+        .form-control.invalid {
+            border-color: #dc2626;
+            box-shadow: 0 0 0 4px rgba(220,38,38,0.1);
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            border: 2px dashed #e5e7eb;
+            border-radius: 12px;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-label:hover {
+            border-color: #7380ec;
+            background: #f0f9ff;
+        }
+        
+        .info-notice {
+            background: #f0f9ff;
+            border: 2px solid #bae6fd;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .info-notice span {
+            color: #0ea5e9;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .info-content p {
+            color: #0c4a6e;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-width: 160px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #7380ec, #5a67d8);
+            color: white;
+            box-shadow: 0 4px 15px rgba(115,128,236,0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(115,128,236,0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-outline {
+            background: white;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .btn-outline:hover {
+            background: #f8fafc;
+            transform: translateY(-1px);
+        }
+        
+        .gehu-footer {
+            background: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .gehu-footer p {
+            color: #64748b;
+            font-size: 0.875rem;
+            margin: 0;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .message {
+            padding: 1rem;
+            border-radius: 12px;
+            margin: 1rem 0;
+            display: none;
+        }
+        
+        .success-message {
+            background: #dcfce7;
+            border: 2px solid #bbf7d0;
+            color: #16a34a;
+        }
+        
+        .error-message {
+            background: #fee2e2;
+            border: 2px solid #fecaca;
+            color: #dc2626;
+        }
+        
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .strength-weak { color: #dc2626; }
+        .strength-medium { color: #f59e0b; }
+        .strength-strong { color: #10b981; }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+            
+            .card-header {
+                padding: 2rem 1rem;
+            }
+            
+            .card-header h2 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 1rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gehu-header">
+        <img src="../../assets/navbar-logo.png" alt="GEHU Logo" class="gehu-logo">
+        <div>
+            <h1>Graphic Era Hill University</h1>
+            <p>Company Registration Portal</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="register-card">
+            <div class="card-header">
+                <div class="header-icon">
+                    <span class="material-symbols-outlined">business</span>
+                </div>
+                <h2>Company Registration</h2>
+                <p>Partner with GEHU for campus recruitment and connect with talented students</p>
+            </div>
+
+            <div class="form-container">
+                <form id="companyRegisterForm">
+                    <div class="form-section">
+                        <div class="section-title">
+                            <span class="material-symbols-outlined">business</span>
+                            Company Information
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Company Name *</label>
+                                <input type="text" name="companyName" class="form-control" required placeholder="Enter company name">
+                            </div>
+                            <div class="form-group">
+                                <label>Industry Type *</label>
+                                <select name="industryType" class="form-control" required>
+                                    <option value="">Select Industry</option>
+                                    <option value="it-software">IT & Software</option>
+                                    <option value="core-engineering">Core Engineering</option>
+                                    <option value="consulting">Consulting</option>
+                                    <option value="finance">Finance & Banking</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="healthcare">Healthcare</option>
+                                    <option value="education">Education</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Company Website</label>
+                                <input type="url" name="website" class="form-control" placeholder="https://www.company.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Company Size</label>
+                                <select name="companySize" class="form-control">
+                                    <option value="">Select Size</option>
+                                    <option value="startup">Startup (1-50 employees)</option>
+                                    <option value="small">Small (51-200 employees)</option>
+                                    <option value="medium">Medium (201-1000 employees)</option>
+                                    <option value="large">Large (1000+ employees)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="grid-column: 1 / -1;">
+                                <label>Company Address *</label>
+                                <textarea name="address" class="form-control" required placeholder="Enter complete company address"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <span class="material-symbols-outlined">person</span>
+                            HR Contact Information
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>HR Name *</label>
+                                <input type="text" name="hrName" class="form-control" required placeholder="Enter HR representative name">
+                            </div>
+                            <div class="form-group">
+                                <label>HR Email *</label>
+                                <input type="email" name="hrEmail" class="form-control" required placeholder="hr@company.com">
+                            </div>
+                            <div class="form-group">
+                                <label>HR Phone *</label>
+                                <input type="tel" name="hrPhone" class="form-control" required placeholder="9876543210">
+                            </div>
+                            <div class="form-group">
+                                <label>HR Designation</label>
+                                <input type="text" name="hrDesignation" class="form-control" placeholder="e.g. HR Manager">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <span class="material-symbols-outlined">work</span>
+                            Recruitment Details
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Recruitment Type *</label>
+                                <select name="recruitmentType" class="form-control" required>
+                                    <option value="">Select Type</option>
+                                    <option value="both">Both Internship & Placement</option>
+                                    <option value="internship">Internship Only</option>
+                                    <option value="placement">Placement Only</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Preferred Branches</label>
+                                <select name="preferredBranches" class="form-control" multiple>
+                                    <option value="cse">Computer Science & Engineering</option>
+                                    <option value="ece">Electronics & Communication</option>
+                                    <option value="me">Mechanical Engineering</option>
+                                    <option value="ce">Civil Engineering</option>
+                                    <option value="all">All Branches</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Company Logo</label>
+                                <div class="file-upload">
+                                    <input type="file" name="logo" accept="image/*" id="logoUpload">
+                                    <label for="logoUpload" class="file-upload-label">
+                                        <span class="material-symbols-outlined">upload</span>
+                                        Choose Logo File
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Expected Hiring Count</label>
+                                <input type="number" name="hiringCount" class="form-control" min="1" placeholder="e.g. 10">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="section-title">
+                            <span class="material-symbols-outlined">lock</span>
+                            Account Security
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Password *</label>
+                                <input type="password" name="password" class="form-control" required placeholder="Create a strong password">
+                                <div id="passwordStrength" class="password-strength"></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password *</label>
+                                <input type="password" name="confirmPassword" class="form-control" required placeholder="Confirm your password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-notice">
+                        <span class="material-symbols-outlined">info</span>
+                        <div class="info-content">
+                            <p><strong>Registration Process:</strong> Your registration will be reviewed by our placement team. You'll receive confirmation and login credentials within 2-3 business days. Please ensure all information is accurate.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="material-symbols-outlined">business_center</span>
+                            Register Company
+                        </button>
+                        <a href="login-page.html" class="btn btn-outline">
+                            Back to Login
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="gehu-footer">
+        <p>&copy; 2026 Graphic Era Hill University. All rights reserved.</p>
+    </div>
+
+    <script>
+        const API = 'http://localhost:5000/api';
+
+        document.getElementById('companyRegisterForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const get = n => this.querySelector(`[name="${n}"]`);
+
+            const companyName      = get('companyName').value.trim();
+            const hrName           = get('hrName').value.trim();
+            const hrEmail          = get('hrEmail').value.trim();
+            const hrPhone          = get('hrPhone').value.trim();
+            const recruitmentType  = get('recruitmentType').value;
+            const password         = get('password').value;
+            const confirmPassword  = get('confirmPassword').value;
+
+            // Validation
+            if (!companyName || !hrName || !hrEmail || !hrPhone || !recruitmentType || !password) {
+                return showMessage('Please fill in all required fields.', 'error');
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(hrEmail)) {
+                return showMessage('Please enter a valid HR email address!', 'error');
+            }
+            if (password !== confirmPassword) {
+                return showMessage('Passwords do not match!', 'error');
+            }
+            if (password.length < 6) {
+                return showMessage('Password must be at least 6 characters!', 'error');
+            }
+
+            // Generate company ID from name
+            const companyId = companyName.replace(/\s+/g, '').substring(0, 6).toUpperCase() +
+                              Math.floor(Math.random() * 900 + 100);
+
+            const submitBtn = this.querySelector('button[type="submit"]');
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Registering Company...';
+            submitBtn.disabled = true;
+
+            try {
+                const res = await fetch(`${API}/auth/companies/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        companyId,
+                        companyName,
+                        hrName,
+                        hrEmail,
+                        hrPhone,
+                        password
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showMessage(`Registration successful! Your Company ID is: ${companyId} — use it to login.`, 'success');
+                    this.reset();
+                    document.getElementById('passwordStrength').textContent = '';
+                    setTimeout(() => window.location.href = 'login-page.html', 4000);
+                } else {
+                    showMessage(data.message || 'Registration failed.', 'error');
+                }
+            } catch (err) {
+                showMessage('Server error. Make sure backend is running.', 'error');
+            } finally {
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">business_center</span> Register Company';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Real-time validation
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    this.classList.add('invalid'); this.classList.remove('valid');
+                } else if (this.value.trim()) {
+                    this.classList.add('valid'); this.classList.remove('invalid');
+                }
+            });
+            input.addEventListener('focus', function() {
+                this.classList.remove('valid', 'invalid');
+            });
+        });
+
+        document.querySelector('input[name="hrPhone"]').addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '').substring(0, 10);
+        });
+
+        document.querySelector('input[name="password"]').addEventListener('input', function() {
+            const p = this.value;
+            const div = document.getElementById('passwordStrength');
+            if (!p) { div.textContent = ''; return; }
+            let s = 0;
+            if (p.length >= 6) s++;
+            if (p.match(/[a-z]/)) s++;
+            if (p.match(/[A-Z]/)) s++;
+            if (p.match(/[0-9]/)) s++;
+            if (p.match(/[^a-zA-Z0-9]/)) s++;
+            div.textContent = s < 3 ? 'Weak password' : s < 4 ? 'Medium password' : 'Strong password';
+            div.className = 'password-strength ' + (s < 3 ? 'strength-weak' : s < 4 ? 'strength-medium' : 'strength-strong');
+        });
+
+        document.getElementById('logoUpload').addEventListener('change', function() {
+            const label = this.nextElementSibling;
+            label.innerHTML = this.files.length
+                ? `<span class="material-symbols-outlined">check_circle</span> ${this.files[0].name}`
+                : '<span class="material-symbols-outlined">upload</span> Choose Logo File';
+            label.style.color = this.files.length ? '#10b981' : '';
+        });
+
+        function showMessage(message, type) {
+            document.querySelectorAll('.message').forEach(m => m.remove());
+            const div = document.createElement('div');
+            div.className = `message ${type}-message`;
+            div.textContent = message;
+            div.style.display = 'block';
+            document.getElementById('companyRegisterForm').prepend(div);
+            setTimeout(() => div.remove(), 6000);
+        }
+    </script>
+</body>
+</html>

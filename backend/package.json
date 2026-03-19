@@ -1,26 +1,39 @@
 {
   "name": "gehu-placement-portal",
-  "version": "1.0.0",
-  "description": "GEHU Placement Portal - Complete Backend API",
+  "version": "2.0.0",
+  "description": "GEHU Placement Portal - Production Ready Full Stack Application",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "setup": "mysql -u root -p < database.sql"
+    "setup-db": "psql $DATABASE_URL -f database.sql"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "mysql2": "^3.6.5",
     "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
-    "multer": "^1.4.5-lts.1"
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.3.1",
+    "express-validator": "^7.3.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.1",
+    "pg": "^8.20.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
   },
-  "keywords": ["placement", "portal", "gehu", "nodejs", "mysql"],
+  "keywords": [
+    "placement",
+    "portal",
+    "gehu",
+    "nodejs",
+    "postgresql",
+    "express",
+    "jwt",
+    "campus-recruitment"
+  ],
   "author": "GEHU Development Team",
   "license": "MIT"
 }

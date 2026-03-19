@@ -1,604 +1,487 @@
-<h1 align="center">🎓 GEHU Placement Portal — Advanced Campus Placement Management System</h1>
+<h1 align="center">🎓 GEHU Placement Portal</h1>
 
 <p align="center">
-  🚀 A comprehensive Node.js web application that automates and streamlines the entire campus placement process, eliminating manual coordination through a centralized platform for students, companies, and administrators.
+  A production-ready full-stack campus placement management system built with Node.js, Express, PostgreSQL, and Vanilla JS — connecting students, companies, and administrators on a single platform.
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"/>
   <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white"/>
-  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"/>
   <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/>
   <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/>
   <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/>
   <img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white"/>
 </p>
-
-<br>
 
 ---
 
 ## 📖 Problem Statement
 
-Traditional campus placement systems are plagued by inefficiencies that hinder both students and recruiters:
+Traditional campus placement systems are plagued by inefficiencies:
 
-**Manual Coordination Chaos**
-- Placement officers juggle 100+ emails per company recruitment drive
-- Students repeatedly fill identical forms across multiple platforms
-- Critical updates get lost in email chains and WhatsApp groups
-
-**Fragmented Data Management**
-- Student information scattered across Excel sheets and paper records
+- Placement officers juggle 100+ emails per recruitment drive
+- Student data scattered across Excel sheets and paper records
 - No centralized tracking of application statuses or placement metrics
-- Manual data entry leads to errors and missed opportunities
+- Manual coordination leads to errors and missed opportunities
 
-**Time-Intensive Processes**
-- 70% of placement officer time spent on administrative tasks
-- Repetitive manual work for each company visit
-- Delayed communication affects placement timelines
-
-**Limited Scalability & Analytics**
-- Difficulty managing multiple simultaneous recruitment drives
-- No insights into placement trends or success patterns
-- Compliance risks due to manual documentation processes
-
-*Result: Delayed placements, reduced company participation, and suboptimal career outcomes for students.*
-
-<br>
+**Result:** Delayed placements, reduced company participation, and suboptimal career outcomes.
 
 ---
 
-## 💡 Our Solution
+## 💡 Solution
 
-GEHU Placement Portal transforms campus recruitment through intelligent automation and centralized management:
+GEHU Placement Portal provides a centralized, automated platform with three role-based portals:
 
-### **Student Experience Revolution**
-- **One-Click Applications**: Apply to multiple drives with a single comprehensive profile
-- **Real-Time Tracking**: Monitor application progress from submission to final selection
-- **Smart Matching**: Get personalized job recommendations based on skills and eligibility
-- **Digital Resume Hub**: Secure cloud storage with version control and easy sharing
-
-### **Company Recruitment Efficiency**
-- **Streamlined Onboarding**: Single registration process with automated approval workflows
-- **Intelligent Filtering**: Advanced candidate search by CGPA, department, skills, and experience
-- **Automated Scheduling**: Seamless coordination of assessments, interviews, and campus visits
-- **Compliance Assurance**: Built-in adherence to institutional placement policies
-
-### **Administrative Excellence**
-- **Unified Dashboard**: Complete oversight of students, companies, and placement drives
-- **Bulk Operations**: Excel/CSV import for mass student registration and data management
-- **Real-Time Analytics**: Live placement statistics, success rates, and performance metrics
-- **Policy Engine**: Configurable rules for eligibility, deadlines, and approval processes
-
-### **Enterprise-Grade Technology**
-- **Secure Architecture**: JWT authentication, role-based access, and data encryption
-- **API-First Design**: RESTful services enabling future HR system integrations
-- **Audit Trail**: Complete transaction logging for transparency and compliance
-- **Responsive Platform**: Seamless experience across desktop, tablet, and mobile devices
-
-*Outcome: 60% reduction in administrative overhead, 40% faster placement cycles, and improved satisfaction for all stakeholders.*
-
-<br>
-
----
-
-## ⚙️ System Architecture
-
-GEHU Placement Portal follows a modern **three-tier architecture** with clear separation of concerns, ensuring scalability, maintainability, and security.
-
-###  High-Level Architecture Diagram
-
-<p align="center">
-  <img src="assets/images/Architecture-Diagram.png" width="85%" alt="High-Level Architecture Diagram"/>
-</p>
-
-<p align="center">
-  <b>Figure 1: High-level system architecture showing interaction between presentation, application, and data layers</b>
-</p>
-
-<br>
-
-###  Detailed Service Architecture
-
-<p align="center">
-  <img src="assets/images/Detailed-Service-Architecture.png" width="85%" alt="Detailed Service Architecture"/>
-</p>
-
-<p align="center">
-  <b>Figure 2: Detailed service architecture showing modular design and database connectivity</b>
-</p>
-
-<br>
-
----
-
-## 🗄️ About The Database
-
-GEHU Placement Portal follows a traditional *RDBMS* (Relational database schema), implemented with *MySQL* having multiple entities participating in relationships for ensuring scalability, maintainability, and security.
-
-###  VISUAL REPRESENTATION OF ER DIAGRAM
-
-```mermaid
-graph TB
-    %% ============================================
-    %% ENHANCED ER DIAGRAM WITH BETTER STYLING
-    %% ============================================
-
-    %% ========== ENTITY BOXES ==========
-    
-    subgraph "DATABASE ENTITIES"
-        ADMIN["ADMINS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR (UK)<br/>phone: VARCHAR<br/>password: VARCHAR<br/>created_at: TIMESTAMP"]
-        
-        COMPANY["COMPANIES<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR (UK)<br/>email: VARCHAR<br/>phone: VARCHAR<br/>website: VARCHAR<br/>password: VARCHAR<br/>status: ENUM"]
-        
-        STUDENT["STUDENTS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR<br/>phone: VARCHAR<br/>course: VARCHAR<br/>year: INT<br/>cgpa: DECIMAL<br/>password: VARCHAR<br/>resume_path: VARCHAR"]
-        
-        EVENT["EVENTS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>title: VARCHAR<br/>description: TEXT<br/>company_name: VARCHAR<br/>event_date: DATE<br/>location: VARCHAR<br/>requirements: TEXT<br/>created_at: TIMESTAMP"]
-        
-        PARTICIPATION["PARTICIPATIONS<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>student_id: BIGINT (FK)<br/>event_id: BIGINT (FK)<br/>status: ENUM<br/>applied_at: TIMESTAMP"]
-        
-        MESSAGE["MESSAGES<br/>━━━━━━━━━━━━━━━━━━━━<br/>id: BIGINT (PK)<br/>name: VARCHAR<br/>email: VARCHAR<br/>subject: VARCHAR<br/>message: TEXT<br/>is_read: BOOLEAN<br/>created_at: TIMESTAMP"]
-    end
-
-    %% ========== RELATIONSHIPS ==========
-    
-    ORG["ORGANIZES<br/>One-to-Many<br/>(1:N)"]
-    REG["APPLIES_FOR<br/>Many-to-Many<br/>(M:N)"]
-    HAS["HAS_APPLICATIONS<br/>One-to-Many<br/>(1:N)"]
-
-    %% ========== CONNECTIONS ==========
-    
-    COMPANY -.->|creates| ORG
-    ORG -.->|generates| EVENT
-    
-    STUDENT -.->|submits| REG
-    REG -.->|creates| PARTICIPATION
-    
-    EVENT -.->|receives| HAS
-    HAS -.->|tracks| PARTICIPATION
-
-    %% ========== ENHANCED STYLING ==========
-    
-    style ADMIN fill:#E8F4FD,stroke:#1976D2,stroke-width:3px,color:#000
-    style COMPANY fill:#E8F5E8,stroke:#388E3C,stroke-width:3px,color:#000
-    style STUDENT fill:#FFF8E1,stroke:#F57C00,stroke-width:3px,color:#000
-    style EVENT fill:#F3E5F5,stroke:#7B1FA2,stroke-width:3px,color:#000
-    style PARTICIPATION fill:#E0F2F1,stroke:#00695C,stroke-width:3px,color:#000
-    style MESSAGE fill:#FCE4EC,stroke:#C2185B,stroke-width:3px,color:#000
-    
-    style ORG fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
-    style REG fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
-    style HAS fill:#FFF9C4,stroke:#F57F17,stroke-width:2px,color:#000
-
-    %% ========== LEGEND ==========
-    
-    subgraph "LEGEND"
-        L1["PK = Primary Key"]
-        L2["UK = Unique Key"]
-        L3["FK = Foreign Key"]
-        L4["1:N = One to Many"]
-        L5["M:N = Many to Many"]
-    end
-    
-    style L1 fill:#E3F2FD,color:#000
-    style L2 fill:#E3F2FD,color:#000
-    style L3 fill:#E3F2FD,color:#000
-    style L4 fill:#E3F2FD,color:#000
-    style L5 fill:#E3F2FD,color:#000
-```
-
-<br>
-
-###  Data Flow Diagram
-
-```mermaid
-graph TB
-    %% ============================================
-    %% ENHANCED DATA FLOW DIAGRAM
-    %% ============================================
-
-    subgraph "USER ROLES"
-        S["STUDENT<br/>━━━━━━━━━━━━━━<br/>• Profile Management<br/>• Event Applications<br/>• Resume Upload<br/>• Status Tracking"]
-        C["COMPANY<br/>━━━━━━━━━━━━━━<br/>• Event Creation<br/>• Candidate Review<br/>• Interview Scheduling<br/>• Selection Process"]
-        A["ADMIN<br/>━━━━━━━━━━━━━━<br/>• User Management<br/>• System Oversight<br/>• Analytics & Reports<br/>• Policy Enforcement"]
-    end
-    
-    subgraph "CORE PROCESSES"
-        E["PLACEMENT EVENTS<br/>━━━━━━━━━━━━━━━━━━━━<br/>• Job Descriptions<br/>• Eligibility Criteria<br/>• Application Deadlines<br/>• Interview Schedules"]
-        P["PARTICIPATION<br/>━━━━━━━━━━━━━━━━━━━━<br/>• Application Status<br/>• Selection Rounds<br/>• Interview Results<br/>• Final Outcomes"]
-        M["COMMUNICATION<br/>━━━━━━━━━━━━━━━━━━━━<br/>• System Messages<br/>• Status Updates<br/>• Notifications<br/>• Announcements"]
-    end
-    
-    subgraph "DATA ANALYTICS"
-        D["DASHBOARD METRICS<br/>━━━━━━━━━━━━━━━━━━━━<br/>• Placement Statistics<br/>• Success Rates<br/>• Company Participation<br/>• Student Performance"]
-    end
-
-    %% ========== ENHANCED CONNECTIONS ==========
-    
-    S -.->|Applies for| E
-    C -.->|Creates & Manages| E
-    A -.->|Oversees & Approves| E
-    
-    E -.->|Generates| P
-    S -.->|Tracks Progress| P
-    C -.->|Reviews Applications| P
-    
-    A -.->|Broadcasts| M
-    C -.->|Sends Updates| M
-    S -.->|Receives Notifications| M
-    
-    P -.->|Feeds Data| D
-    E -.->|Provides Metrics| D
-    A -.->|Analyzes Trends| D
-
-    %% ========== ENHANCED STYLING ==========
-    
-    style S fill:#FFF8E1,stroke:#F57C00,stroke-width:4px,color:#000
-    style C fill:#E8F5E8,stroke:#388E3C,stroke-width:4px,color:#000
-    style A fill:#E8F4FD,stroke:#1976D2,stroke-width:4px,color:#000
-    style E fill:#F3E5F5,stroke:#7B1FA2,stroke-width:4px,color:#000
-    style P fill:#E0F2F1,stroke:#00695C,stroke-width:4px,color:#000
-    style M fill:#FCE4EC,stroke:#C2185B,stroke-width:4px,color:#000
-    style D fill:#FFF3E0,stroke:#FF9800,stroke-width:4px,color:#000
-```
-
-<br>
-
----
-
-## 🚀 Key Features
-
-### Student Module
-- **Profile Management**: Complete academic and personal information
-- **Event Registration**: Register for placement drives
-- **Application Tracking**: Monitor application status
-- **Resume Management**: Secure resume upload and storage
-- **Dashboard Analytics**: Performance metrics and progress tracking
-
-### Company Module
-- **Registration & Approval**: Company onboarding workflow
-- **Job Postings**: Create and manage placement opportunities
-- **Candidate Search**: Filter and shortlist eligible students
-- **Event Management**: Schedule and manage placement drives
-
-### Admin Module
-- **User Management**: Approve/disable student and company accounts
-- **Event Coordination**: Create and manage all placement events
-- **Bulk Operations**: Import/export data via Excel/CSV
-- **Analytics Dashboard**: Placement statistics and reports
-- **System Configuration**: Manage platform settings
-
-### Technical Features
-- **JWT Authentication**: Secure token-based authentication for all user types
-- **RESTful APIs**: Complete CRUD operations for all entities
-- **File Upload**: Resume and document upload functionality
-- **Real-time Messaging**: Communication between stakeholders
-- **Responsive Design**: Mobile-friendly interface
-- **Database Optimization**: Indexed queries and connection pooling
-
-<br>
+- **Students** — apply to drives, track applications, upload resumes, view announcements
+- **Companies** — create drives, manage applicants, update selection status
+- **Admins** — manage all users, events, analytics, announcements, and messages
 
 ---
 
 ## 🛠️ Tech Stack
 
-<div align="center">
-
-<table>
-<thead>
-<tr>
-<th>🖥️ Technology</th>
-<th>⚙️ Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"/></td>
-<td>Backend runtime environment</td>
-</tr>
-<tr>
-<td><img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white"/></td>
-<td>Web framework for API development</td>
-</tr>
-<tr>
-<td><img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/></td>
-<td>Relational database management</td>
-</tr>
-<tr>
-<td><img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"/></td>
-<td>Secure authentication and authorization</td>
-</tr>
-<tr>
-<td><img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"/></td>
-<td>Structure of web pages</td>
-</tr>
-<tr>
-<td><img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"/></td>
-<td>Styling and responsive design</td>
-</tr>
-<tr>
-<td><img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"/></td>
-<td>Client-side interactions and API calls</td>
-</tr>
-<tr>
-<td><img src="https://img.shields.io/badge/Multer-FF6B6B?style=for-the-badge&logo=node.js&logoColor=white"/></td>
-<td>File upload middleware</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-
-<br>
+| Layer | Technology |
+|---|---|
+| Runtime | Node.js v18+ |
+| Framework | Express.js v4 |
+| Database | PostgreSQL 18 (hosted on Render) |
+| ORM/Driver | pg (node-postgres) |
+| Auth | JWT (jsonwebtoken) + bcryptjs |
+| File Upload | Multer (PDF only, 5MB limit) |
+| Email | Nodemailer (Gmail SMTP) |
+| Security | Helmet, express-rate-limit, CORS |
+| Frontend | Vanilla HTML5 + CSS3 + JavaScript (no frameworks) |
+| Deployment | Render (backend + database) |
 
 ---
 
-## 📁 Project Directory Structure
+## ✨ Features
+
+### Student Portal
+- Login with admission number + password
+- View dashboard stats (applied, selected, pending, available drives)
+- Browse and apply to placement drives (CGPA + department eligibility check)
+- Track all applications with status (REGISTERED → SELECTED/REJECTED)
+- Withdraw applications (blocked if SELECTED/COMPLETED)
+- Upload resume (PDF, max 5MB) or save Google Drive link
+- View placement analytics with status breakdown bars
+- Read announcements from placement cell
+- Send messages to admin, view replies
+- Update contact info and change password
+
+### Company Portal
+- Login with company ID or HR email
+- Dashboard with drive stats and recent applicants
+- Create, edit, delete placement drives
+- View applicants per drive sorted by CGPA
+- Update applicant status (REGISTERED/ATTEMPTED/SELECTED/REJECTED etc.)
+- Filter applicants by CGPA, department, status
+- Send messages to admin
+
+### Admin Portal
+- Login with email or admin ID
+- Dashboard with 6 KPI stats + recent activity + top companies
+- Full CRUD for students (search, filter by dept/batch/CGPA)
+- Full CRUD for companies
+- Full CRUD for events (linked to company by FK)
+- Placement analytics by department and by company
+- Announcements — create, edit, delete (visible to all students)
+- Messages — view all, mark read, reply (stored in DB), delete
+- Edit profile and change password
+
+### Security
+- JWT authentication with 24h expiry
+- Role-based access control (student / company / admin)
+- Rate limiting: 10 login attempts per 15 minutes
+- Helmet security headers
+- CORS restricted to allowed origins
+- PDF-only file upload with extension + mimetype validation
+- bcrypt password hashing (cost factor 10)
+- Password reset via email token (1 hour expiry)
+
+---
+
+## 🗄️ Database Schema
+
+PostgreSQL 18 on Render. 7 tables with proper foreign keys, indexes, and `updated_at` triggers.
 
 ```
-GEHU-Placement Portal/
-├── assets/                        # Static assets and media
-│   └── images/                    # Company logos and university images
-│       ├── accenture-logo.png     # Accenture company logo
-│       ├── amazon-logo.jpg        # Amazon company logo
-│       ├── Architecture-Diagram.png # High-level architecture diagram
-│       ├── deshaw-logo.png        # DE Shaw company logo
-│       ├── Detailed-Service-Architecture.png # Detailed service architecture
-│       ├── favicon.png            # Site favicon
-│       ├── google-logo.png        # Google company logo
-│       ├── infosys-logo.jpg       # Infosys company logo
-│       ├── main-building.jpg      # University campus images
-│       ├── microsoft-logo.png     # Microsoft company logo
-│       ├── navbar-logo.png        # Navigation branding
-│       ├── tcs-logo.png           # TCS company logo
-│       ├── visa-logo.png          # Visa company logo
-│       └── wipro-logo.png         # Wipro company logo
-├── backend/                       # Node.js backend service
-│   ├── config/                    # Configuration files
-│   │   └── database.js            # MySQL connection configuration
-│   ├── controllers/               # Business logic controllers
-│   │   ├── adminController.js     # Admin panel operations
-│   │   ├── authController.js      # Authentication management
-│   │   ├── eventController.js     # Event and drive management
-│   │   ├── messageController.js   # Communication system
-│   │   ├── participationController.js # Application tracking
-│   │   └── studentController.js   # Student operations
-│   ├── middleware/                # Security and validation
-│   │   └── auth.js                # JWT authentication middleware
-│   ├── routes/                    # API route definitions
-│   │   ├── admin.js               # Admin operations routes
-│   │   ├── auth.js                # Authentication routes
-│   │   ├── companies.js           # Company operations routes
-│   │   ├── events.js              # Event management routes
-│   │   ├── messages.js            # Communication routes
-│   │   └── students.js            # Student management routes
-│   ├── uploads/                   # File storage system
-│   │   ├── resumes/               # Student resume repository
-│   │   └── .gitkeep               # Git placeholder file
-│   ├── .env                       # Environment variables
-│   ├── database.sql               # Database schema and setup
-│   ├── package.json               # Backend dependencies
-│   └── server.js                  # Express server entry point
-├── docs/                          # Documentation and screenshots
-│   ├── Admin_Dashboard.png        # Admin interface preview
-│   ├── Company_Dashboard.png      # Company portal preview
-│   ├── Home_Page.png              # Landing page preview
-│   └── Student_Dashboard.png      # Student portal preview
-├── src/                           # Frontend source code
-│   ├── pages/                     # HTML page templates
-│   │   ├── admin-access.html      # Admin access control page
-│   │   ├── admin-dashboard.html   # Admin control panel
-│   │   ├── company-dashboard.html # Company recruitment portal
-│   │   ├── company-register.html  # Company registration form
-│   │   ├── index.html             # Main landing page
-│   │   ├── login-page.html        # Authentication interface
-│   │   ├── student-dashboard.html # Student portal
-│   │   ├── student-register.html  # Student registration form
-│   │   └── system-architecture.html # System architecture documentation
-│   ├── scripts/                   # JavaScript functionality
-│   │   ├── company-dashboard.js   # Company portal features
-│   │   ├── index.js               # Landing page interactions
-│   │   └── student-dashboard.js   # Student portal logic
-│   └── styles/                    # CSS stylesheets
-│       ├── company-dashboard.css  # Company portal design
-│       ├── index.css              # Landing page styles
-│       └── student-dashboard.css  # Student portal styling
-├── .gitignore                     # Git ignore rules
-├── .vercelignore                  # Vercel deployment ignore rules
-├── index.html                     # Root application entry point
-├── LICENSE                        # MIT License
-├── README.md                      # Project documentation
-└── vercel.json                    # Vercel deployment configuration
+admins          — admin_id (PK), admin_name, email_address, password, ...
+students        — student_admission_number (PK), name, dept, cgpa, password, ...
+companies       — company_id (PK), company_name, hr_email, password, ...
+events          — event_id (PK), company_id (FK→companies), job_role, status, ...
+participation   — (student_admission_number, event_id) composite PK, status, ...
+messages        — id (PK), sender_name, subject, message, reply, status, ...
+announcements   — id (PK), title, content, created_by, ...
 ```
 
-<br>
+**Foreign Keys:**
+- `events.company_id` → `companies.company_id` ON DELETE CASCADE
+- `participation.student_admission_number` → `students` ON DELETE CASCADE
+- `participation.event_id` → `events` ON DELETE CASCADE
+
+**Indexes:** department+cgpa, batch, company+status, event dates, participation lookups, message status, announcement date
 
 ---
 
-## 📸 Application Screenshots
+## 📁 Project Structure
 
-###  Home Page
-<p align="center">
-  <img src="docs/Home_Page.png" width="85%" alt="Home Page"/>
-</p>
-
-<br>
-
-###  Student Portal
-<p align="center">
-  <img src="docs/Student_Dashboard.png" width="85%" alt="Student Dashboard"/>
-</p>
-
-<br>
-
-###  Company Portal
-<p align="center">
-  <img src="docs/Company_Dashboard.png" width="85%" alt="Company Dashboard"/>
-</p>
-
-<br>
-
-###  Admin Portal
-<p align="center">
-   <img src="docs/Admin_Dashboard.png" width="85%" alt="Admin Dashboard"/>
-</p>
-
-<br>
+```
+GEHU-Placement_Portal/
+├── assets/
+│   └── images/                    # Logos, favicon, architecture diagrams
+├── backend/
+│   ├── config/
+│   │   └── database.js            # PostgreSQL pool + execute() wrapper
+│   ├── controllers/
+│   │   ├── adminController.js     # Students, companies, events, analytics, messages, announcements
+│   │   ├── authController.js      # Login, register, forgot/reset password
+│   │   ├── companyController.js   # Company profile, drives, applicants, messages
+│   │   ├── eventController.js     # Public event browsing endpoints
+│   │   ├── messageController.js   # Message CRUD
+│   │   ├── participationController.js  # Participation records
+│   │   └── studentController.js   # Profile, applications, resume, dashboard
+│   ├── middleware/
+│   │   ├── auth.js                # JWT verification
+│   │   └── roleMiddleware.js      # Role-based access guard
+│   ├── routes/
+│   │   ├── admin.js               # 22 admin routes
+│   │   ├── announcements.js       # Public GET announcements
+│   │   ├── auth.js                # 8 auth routes
+│   │   ├── companies.js           # 11 company routes
+│   │   ├── events.js              # 4 public event routes
+│   │   ├── messages.js            # 4 message routes
+│   │   └── students.js            # 9 student routes
+│   ├── uploads/
+│   │   └── resumes/               # Uploaded PDF resumes
+│   ├── utils/
+│   │   └── emailService.js        # Nodemailer with graceful fallback
+│   ├── .env                       # Environment variables (not committed)
+│   ├── database.sql               # PostgreSQL schema + sample data
+│   ├── package.json
+│   └── server.js                  # Express app entry point
+├── docs/
+│   ├── Admin_Dashboard.png
+│   ├── Company_Dashboard.png
+│   ├── Home_Page.png
+│   └── Student_Dashboard.png
+├── src/
+│   ├── pages/
+│   │   ├── admin-dashboard.html
+│   │   ├── company-dashboard.html
+│   │   ├── login-page.html
+│   │   ├── reset-password.html
+│   │   ├── student-dashboard.html
+│   │   ├── student-register.html
+│   │   ├── company-register.html
+│   │   └── index.html
+│   ├── scripts/
+│   │   ├── api.js                 # Central fetch wrapper (Bearer token, 401 redirect)
+│   │   ├── auth.js                # Login, logout, requireAuth, getUser, showToast
+│   │   ├── admin.js               # All admin dashboard logic
+│   │   ├── company.js             # All company dashboard logic
+│   │   └── student.js             # All student dashboard logic
+│   └── styles/
+│       ├── student-dashboard.css
+│       ├── company-dashboard.css
+│       └── index.css
+├── .gitignore
+├── .vercelignore
+├── index.html                     # Root entry — redirects to src/pages/index.html
+├── LICENSE
+├── README.md
+├── run.sh                         # One-command local startup script
+└── vercel.json                    # Render/Vercel deployment config
+```
 
 ---
 
-## 🚀 Quick Start Guide
+## 🌐 API Reference
+
+### Authentication — `/api/auth`
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/students/login` | Student login |
+| POST | `/students/register` | Student registration |
+| POST | `/admins/login` | Admin login |
+| POST | `/companies/login` | Company login |
+| POST | `/companies/register` | Company registration |
+| POST | `/forgot-password` | Send password reset email |
+| POST | `/reset-password` | Reset password with token |
+| POST | `/logout` | Logout |
+
+### Students — `/api/students` *(auth: student)*
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/dashboard` | Stats + recent apps + upcoming drives |
+| GET | `/profile` | Full student profile |
+| PUT | `/profile` | Update mobile, email, address, backlogs |
+| PUT | `/change-password` | Change password |
+| POST | `/resume/upload` | Upload PDF resume (max 5MB) |
+| PUT | `/resume/link` | Save Google Drive resume URL |
+| GET | `/applications` | All applications with company + status |
+| POST | `/apply/:eventId` | Apply to a drive (eligibility checked) |
+| DELETE | `/withdraw/:eventId` | Withdraw application |
+
+### Events — `/api/events` *(public)*
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/` | All events (filterable by status, search) |
+| GET | `/upcoming` | Open upcoming drives |
+| GET | `/:id` | Single event with company details |
+| GET | `/company/:companyId` | Events by company |
+
+### Companies — `/api/companies` *(auth: company)*
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/dashboard` | Stats + recent applicants |
+| GET/PUT | `/profile` | View/update company profile |
+| PUT | `/change-password` | Change password |
+| GET | `/events` | My drives with applicant count |
+| POST | `/events` | Create new drive |
+| PUT | `/events/:id` | Edit drive (ownership checked) |
+| DELETE | `/events/:id` | Delete drive (ownership checked) |
+| GET | `/events/:eventId/applicants` | Applicants for a drive |
+| PUT | `/events/:eventId/applicants/:num` | Update applicant status |
+| GET | `/applicants` | All applicants (filterable) |
+| POST | `/messages` | Send message to admin |
+
+### Admin — `/api/admin` *(auth: admin)*
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/dashboard` | 6 KPI stats + recent activity + top companies |
+| GET | `/analytics` | By dept, by company, monthly trend |
+| GET/PUT | `/profile` | View/update admin profile |
+| PUT | `/change-password` | Change password |
+| GET/POST | `/students` | List (paginated, filterable) / Add |
+| PUT/DELETE | `/students/:id` | Edit / Delete student |
+| GET/POST | `/companies` | List / Add company |
+| PUT/DELETE | `/companies/:id` | Edit / Delete company |
+| GET/POST | `/events` | List / Create event |
+| PUT/DELETE | `/events/:id` | Edit / Delete event |
+| GET | `/messages` | All messages (paginated, filterable) |
+| PUT | `/messages/:id/read` | Mark as read |
+| POST | `/messages/:id/reply` | Reply to message |
+| DELETE | `/messages/:id` | Delete message |
+| GET/POST | `/announcements` | List / Create announcement |
+| PUT/DELETE | `/announcements/:id` | Edit / Delete announcement |
+
+### Public — `/api/announcements`, `/api/messages/send`
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/announcements` | All announcements (no auth) |
+| POST | `/api/messages/send` | Send message (no auth required) |
+
+---
+
+## 🚀 Quick Start (Local)
 
 ### Prerequisites
-- ✅ **Node.js (v14+)** installed
-- ✅ **MySQL (v8.0+)** database server
-- ✅ **Modern web browser** (Chrome, Firefox, Safari, Edge)
+- Node.js v18+
+- PostgreSQL (local) **or** a Render PostgreSQL instance
 
-### Installation & Setup
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/AbhishekGiri04/GEHU-Smart_Placement_Portal.git
-   cd "GEHU-Placement Portal"
-   ```
-
-2. **Setup backend**
-   ```bash
-   cd backend
-   npm install
-   ```
-
-3. **Configure database**
-   ```bash
-   mysql -u root -p < database.sql
-   ```
-
-4. **Configure environment variables**
-   ```bash
-   # Create .env file in backend directory
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASSWORD=your_password
-   DB_NAME=gehu_placement
-   JWT_SECRET=your_jwt_secret
-   PORT=5000
-   ```
-
-5. **Start the application**
-   ```bash
-   npm start
-   ```
-
-6. **Access the application**
-   ```
-   http://localhost:5000
-   ```
-
-<br>
-
----
-
-## 🌐 API Endpoints
-
+### 1. Clone
 ```bash
-# Authentication Routes
-POST /api/auth/students/login      # Student authentication
-POST /api/auth/admins/login        # Admin authentication
-POST /api/auth/companies/login     # Company authentication
-
-# Student Management
-GET  /api/students                 # Fetch all students
-POST /api/students/register        # Register new student
-PUT  /api/students/:id             # Update student profile
-POST /api/students/resume          # Upload resume
-
-# Event Management
-GET  /api/events                   # Get all placement drives
-POST /api/events                   # Create new drive
-GET  /api/events/upcoming          # Upcoming events
-
-# Communication System
-POST /api/messages/send            # Send message
-GET  /api/messages                 # Get messages (admin)
-
-# Advanced Features
-GET  /api/admin/dashboard          # Admin dashboard data
-GET  /api/admin/analytics          # Placement statistics
+git clone https://github.com/AbhishekGiri04/GEHU-Smart_Placement_Portal.git
+cd GEHU-Placement_Portal
 ```
 
-<br>
+### 2. Configure environment
+```bash
+# backend/.env
+DATABASE_URL=postgresql://user:password@host:5432/dbname
+JWT_SECRET=your_strong_secret_here
+PORT=5000
+NODE_ENV=development
+FRONTEND_URL=http://localhost:5000
+EMAIL_USER=your_gmail@gmail.com
+EMAIL_PASS=your_gmail_app_password
+```
+
+### 3. Install dependencies
+```bash
+cd backend
+npm install
+```
+
+### 4. Import database schema
+```bash
+psql "$DATABASE_URL" -f database.sql
+```
+
+### 5. Start
+```bash
+npm start
+# or use the startup script from project root:
+bash run.sh
+```
+
+### 6. Open
+```
+http://localhost:5000
+```
 
 ---
 
-## 🧪 Testing & Validation
-<div align="center">
+## 🔑 Sample Login Credentials
 
-| Test Type | Status | Notes |
-|-----------|--------|-------|
-| Unit Testing | ✅ Pass | Controller and service layer testing |
-| Integration Testing | ✅ Pass | API endpoints validated |
-| Database Testing | ✅ Pass | Schema and relationships verified |
-| Frontend UI Testing | ✅ Pass | All functionality verified across browsers |
-| Security Testing | ✅ Pass | JWT authentication flow tested |
-| Performance Testing | ✅ Pass | Optimized database queries |
+| Role | ID / Email | Password |
+|---|---|---|
+| Student | `2318169` | `gehu@123` |
+| Student | `2318699` | `gehu@123` |
+| Admin | `admin@gehu.edu` | `admin123` |
+| Admin | `tpo@gehu.edu` | `admin123` |
+| Company | `TCS001` | `comp@123` |
+| Company | `INF001` | `comp@123` |
+| Company | `AMZ001` | `comp@123` |
 
-</div>
+---
 
-<br>
+## ☁️ Deployment (Render)
+
+### Database
+1. Create a PostgreSQL instance on [Render](https://render.com)
+2. Copy the **External Database URL**
+3. Run schema: `psql "your_external_url" -f backend/database.sql`
+
+### Backend Web Service
+1. Create a new **Web Service** on Render
+2. Connect your GitHub repository
+3. Set **Root Directory** to `backend`
+4. Set **Build Command**: `npm install`
+5. Set **Start Command**: `node server.js`
+6. Add environment variables:
+   ```
+   DATABASE_URL = <your render postgres external url>
+   JWT_SECRET   = <strong random string>
+   NODE_ENV     = production
+   FRONTEND_URL = https://your-app.onrender.com
+   PORT         = 5000
+   ```
+
+---
+
+## 📸 Screenshots
+
+### Home Page
+<p align="center"><img src="docs/Home_Page.png" width="85%" alt="Home Page"/></p>
+
+### Student Portal
+<p align="center"><img src="docs/Student_Dashboard.png" width="85%" alt="Student Dashboard"/></p>
+
+### Company Portal
+<p align="center"><img src="docs/Company_Dashboard.png" width="85%" alt="Company Dashboard"/></p>
+
+### Admin Portal
+<p align="center"><img src="docs/Admin_Dashboard.png" width="85%" alt="Admin Dashboard"/></p>
+
+---
+
+## 🗺️ ER Diagram
+
+```mermaid
+erDiagram
+    ADMINS {
+        bigserial admin_id PK
+        varchar admin_name
+        varchar email_address UK
+        varchar password
+        timestamptz created_at
+    }
+    STUDENTS {
+        varchar student_admission_number PK
+        varchar student_first_name
+        varchar student_last_name
+        varchar department
+        double cgpa
+        varchar password
+        timestamptz created_at
+    }
+    COMPANIES {
+        varchar company_id PK
+        varchar company_name UK
+        varchar hr_email UK
+        varchar password
+        timestamptz created_at
+    }
+    EVENTS {
+        bigserial event_id PK
+        varchar company_id FK
+        varchar event_name
+        varchar job_role
+        double expected_cgpa
+        varchar status
+        timestamptz registration_end
+    }
+    PARTICIPATION {
+        varchar student_admission_number FK
+        bigint event_id FK
+        varchar participation_status
+        timestamptz created_at
+    }
+    MESSAGES {
+        bigserial id PK
+        varchar sender_name
+        varchar sender_email
+        text message
+        text reply
+        varchar status
+    }
+    ANNOUNCEMENTS {
+        bigserial id PK
+        varchar title
+        text content
+        varchar created_by
+        timestamptz created_at
+    }
+
+    COMPANIES ||--o{ EVENTS : "creates"
+    STUDENTS ||--o{ PARTICIPATION : "applies"
+    EVENTS ||--o{ PARTICIPATION : "receives"
+```
 
 ---
 
 ## 🌱 Future Enhancements
 
-- **📱 Mobile Application**: Native iOS and Android apps
-- **🤖 AI-Powered Matching**: Intelligent student-company matching
-- **📊 Advanced Analytics**: Predictive placement analytics
-- **🔔 Push Notifications**: Real-time mobile notifications
-- **🌐 Multi-Campus Support**: Support for multiple university campuses
-- **📧 Email Integration**: Automated email campaigns
-- **📈 Performance Dashboard**: Real-time system monitoring
-
-<br>
-
----
-
-## 📞 Help & Contact
-
-> 💬 *Got questions or need assistance with GEHU Placement Portal?*  
-> We're here to help with setup, customization, and deployment!
-
-<div align="center">
-
-<b>👤 Development Team</b>  
-<a href="https://www.linkedin.com/in/abhishek-giri04/">
-  <img src="https://img.shields.io/badge/Connect%20on-LinkedIn-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
-</a>  
-<a href="https://github.com/AbhishekGiri04">
-  <img src="https://img.shields.io/badge/Follow%20on-GitHub-black?style=for-the-badge&logo=github" alt="GitHub"/>
-</a>  
-<a href="mailto:abhishekgiri1978@gmail.com">
-  <img src="https://img.shields.io/badge/Email-Support-red?style=for-the-badge&logo=gmail" alt="Email"/>
-</a>
-
-<br/>
+- **📱 Mobile App** — React Native iOS/Android
+- **🤖 AI Matching** — Smart student-company recommendations
+- **📊 Advanced Analytics** — Predictive placement trends
+- **🔔 Push Notifications** — Real-time browser notifications
+- **📧 Email Campaigns** — Automated drive reminders
+- **🌐 Multi-Campus** — Support multiple university branches
+- **📤 Bulk Import** — CSV/Excel student registration
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-**🎓 Built with ❤️ for Graphic Era Hill University**  
-*Transforming University Placement Management Through Technology*
-
-</div>
+MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
 <div align="center">
 
-**© 2026 GEHU Placement Portal - Advanced Placement Management System. All Rights Reserved.**
+**👤 Developer**
+
+<a href="https://www.linkedin.com/in/abhishek-giri04/">
+  <img src="https://img.shields.io/badge/LinkedIn-Abhishek_Giri-blue?style=for-the-badge&logo=linkedin"/>
+</a>
+&nbsp;
+<a href="https://github.com/AbhishekGiri04">
+  <img src="https://img.shields.io/badge/GitHub-AbhishekGiri04-black?style=for-the-badge&logo=github"/>
+</a>
+&nbsp;
+<a href="mailto:abhishekgiri1978@gmail.com">
+  <img src="https://img.shields.io/badge/Email-abhishekgiri1978@gmail.com-red?style=for-the-badge&logo=gmail"/>
+</a>
+
+<br><br>
+
+**🎓 Built for Graphic Era Hill University**
+
+*© 2026 GEHU Placement Portal. All Rights Reserved.*
 
 </div>
